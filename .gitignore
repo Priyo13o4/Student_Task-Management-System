@@ -9,6 +9,7 @@ __pycache__/
 db.sqlite3
 *.sqlite3
 .env
+*.pyc
 
 # Migrations (optional if you want fresh state always)
 **/migrations/*.py
