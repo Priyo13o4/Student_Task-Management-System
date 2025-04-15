@@ -6,14 +6,9 @@ __pycache__/
 *.log
 
 # Django
-db.sqlite3
-*.sqlite3
-.env
 *.pyc
 
 # Migrations (optional if you want fresh state always)
-**/migrations/*.py
-!**/migrations/__init__.py
 
 # VS Code
 .vscode/
