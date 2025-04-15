@@ -8,7 +8,11 @@ __pycache__/
 # Django
 *.pyc
 
+<<<<<<< HEAD
 
+=======
+# Migrations (optional if you want fresh state always)
+>>>>>>> feature/login
 
 # VS Code
 .vscode/
