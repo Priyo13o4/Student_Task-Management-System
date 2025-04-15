@@ -6,14 +6,15 @@ __pycache__/
 *.log
 
 # Django
-db.sqlite3
-*.sqlite3
-.env
 *.pyc
 
+<<<<<<< HEAD
 # Migrations (optional - start fresh state always)
 **/migrations/*.py
 !**/migrations/__init__.py
+=======
+# Migrations (optional if you want fresh state always)
+>>>>>>> 89da38e (Added Login and Dashboard Html with Users(working))
 
 # VS Code
 .vscode/
