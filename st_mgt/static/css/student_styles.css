@@ -1,0 +1,38 @@
+body {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+
+#profile_menu{
+  background-color:  #7600bc;
+  padding-bottom: 1cm;
+  margin-left:-1cm;
+  margin-right:-1cm;
+  margin-top:-1cm;
+  padding-top: 1 cm;
+  padding-bottom: 1cm;
+  height: 1cm;
+}
+ 
+#welcome{
+
+  color: white;
+  font-size: 20px;
+  text-decoration:none;
+  /* padding-top: 5mm; */
+
+}
+
+.topmenu a {
+    color: lightgray;
+    float : right ;
+    padding-right: 1cm;
+    padding-top: 1cm;
+    font-size: 20px;
+    text-decoration:none;
+  }
+.topmenu a:hover {
+    color: white;
+    font-weight: bolder;
+    text-decoration: underline;
+}
+  

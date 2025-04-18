@@ -1,3 +1,24 @@
-<!-- dashboard/student_dashboard.html -->
-<h2>Welcome Student: {{ request.user.username }}</h2>
-<a href="{% url 'logout' %}">Logout</a>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/student_styles.css' %}">
+</head>
+<body>
+    <div id="welcome">
+        Welcome Student: {{ request.user.username }}
+    </div>
+
+    <nav id="profile_menu">
+        <div class="topmenu">
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </nav>
+
+    <section id="Grades">
+        Grades
+    </section>
+</body>
+</html>
