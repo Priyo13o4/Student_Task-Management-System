@@ -9,35 +9,58 @@ body {
     justify-content: center;
     height: 100vh;
     margin: 0;
+} 
+
+.error-message {
+    color: white;
+    background: rgba(255, 0, 0, 0.542); /* semi-transparent red looks good with frost effect domt change it lol */
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+    width: fit-content;
+    margin: 10px auto;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px); /*speciafiaclly for safari as it was causing issues */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
     color: #333;
     margin-bottom: 20px;
-    background-color: #fff;
+    background : rgba(209, 230, 255, 0.8);
     padding: 10px 20px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0.1, 0.1, 0.1, 0.1);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
 form {
-    background-color: #fff;
-    padding: 30px 40px;
+    background : rgba(255, 255, 255, 0.554);
+    padding: 20px 30px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0.1, 0.1, 0.1, 0.1);
     display: flex;
     flex-direction: column;
     width: 300px;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    box-sizing: border-box;
+    align-items: center;
 }
 
 input[type="text"],
 input[type="password"] {
     padding: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
     width: 100%;
+    box-sizing: border-box;
 }
 
 input[type="text"]:focus,
@@ -59,10 +82,4 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
     background-color: #0056b3;
-}
-
-p {
-    margin-top: 10px;
-    color: red;
-    font-size: 14px;
 }

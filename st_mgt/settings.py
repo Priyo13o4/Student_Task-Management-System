@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'student',
-    'task'
+    'task',
+    'faculty',
+    'courses'
 ]
 
 MIDDLEWARE = [
@@ -131,3 +133,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # st_mgt/settings.py
 
 AUTH_USER_MODEL = 'users.CustomUser'
+
+LOGIN_URL = '/users/login/'

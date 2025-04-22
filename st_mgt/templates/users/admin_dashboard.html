@@ -1,2 +1,66 @@
-<h2>Welcome {{ request.user.username }}</h2>
-<a href="{% url 'logout' %}">Logout</a>
+{% load static %}
+<!DOCTYPE html>
+<html lang = en>
+    <head>
+        <meta charset="UTF-8">
+        <title>Admin Dashboard</title>
+        <link rel = "stylesheet" href = "{% static 'css/admin_styles.css' %}">
+    </head>
+    <body> 
+        {% if messages %} 
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> <!-- This will print when user creation is successful-->
+                {% endfor %}
+            </ul>
+        {% endif %}
+    <div id="welcome">
+        Greetings : {{ request.user.username }}
+    </div>
+    <nav id="profile_menu">
+        <div class="topmenu">
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </nav>
+    <section id="Summary">
+        Summary
+
+        <h1>Total Students</h1>
+            <p>{{total_students}}</p>
+        <h1>Total Faculty</h1>
+            <p>{{total_faculty}}</p>
+        <h1>Total Tasks</h1>
+            <p>{{total_tasks}}</p>
+        <h1>Total Courses</h1>
+            <p>{{total_courses}}</p>
+    </section>
+    <div></div>
+    <section id="create-user">
+        
+        <h2>Create New User</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ user_form.as_p}}
+            <button type="submit" name="create_user">Create User</button>
+        </form>
+    </section>
+    <div></div>
+    <section id = "create student">
+        <h2>Create New Student</h2>
+        <form method="POST">
+            {%csrf_token%}
+            {{student_form.as_p}}
+        </form>
+    </section>
+    <div></div>
+    <section id = "create faculty">
+        <h2>Create New Faculty</h2>
+        <form method="POST">
+            {%csrf_token%}
+            {{faculty_form.as_p}}
+        </form>
+    </section>
+    
+    </body>
+    
+</html>

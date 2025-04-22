@@ -14,11 +14,10 @@ body {
 }
  
 #welcome{
-
   color: white;
   font-size: 20px;
   text-decoration:none;
-  /* padding-top: 5mm; */
+  padding-top: 10px
 
 }
 
@@ -26,7 +25,7 @@ body {
     color: lightgray;
     float : right ;
     padding-right: 1cm;
-    padding-top: 1cm;
+    padding-top: 0.5cm;
     font-size: 20px;
     text-decoration:none;
   }
