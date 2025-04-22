@@ -50,6 +50,7 @@
         <form method="POST">
             {%csrf_token%}
             {{student_form.as_p}}
+            <button type="submit" name="create_student">Create student</button>
         </form>
     </section>
     <div></div>
@@ -58,6 +59,7 @@
         <form method="POST">
             {%csrf_token%}
             {{faculty_form.as_p}}
+            <button type="submit" name="create_faculty">Create faculty</button>
         </form>
     </section>
     

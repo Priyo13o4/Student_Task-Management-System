@@ -80,8 +80,7 @@ def admin_dashboard(request):
     if request.method == "POST" and 'create_student' in request.POST:
         student_form = StudentForm(request.POST)
         if student_form.is_valid():
-                student = student_form.save(commit=False)
-                student.user_id = request.session.pop('new_user_id', None)
+                student = student_form.save()
                 student.save()
                 messages.success(request, f"Student '{student.user.username}' created successfully.")
                 return redirect('admin_dashboard')
