@@ -1,9 +1,27 @@
-from django.shortcuts import render
-from django.shortcuts import redirect
-from django.http import HttpResponse
+from student.models import Student, Grade
+from courses.models import Course
 
-def student_list(request):
-    return HttpResponse("Student list view here.")
+def get_student_context(user):
+    student = Student.objects.get(user=user)
+    grades = Grade.objects.filter(student=student)
+    courses = student.courses.all()
 
-def student_detail(request, pk):
-    return HttpResponse(f"Student detail view for student ID {pk}")
+    GRADE_POINTS = {"A": 10, "B": 8, "C": 6, "D": 4, "F": 0}
+    gpa = 0.0
+    if grades.exists():
+        total = sum(GRADE_POINTS.get(g.grade, 0) for g in grades)
+        gpa = round(total / grades.count(), 2)
+
+    context = {
+        'student': student,
+        'grades': grades,
+        'courses': courses,
+        'gpa': gpa
+    }
+
+    # return {
+    #     'student': student,
+    #     'grades': grades,
+    #     'courses': courses,
+    #     'gpa': gpa,
+    # }

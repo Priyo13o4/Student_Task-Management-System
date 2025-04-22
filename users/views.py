@@ -10,7 +10,7 @@ from task.models import Task
 from .forms import LoginForm
 from users.forms import CustomUserCreationForm
 from django.contrib import messages
-
+from student.views import get_student_context
 
 """we could also use the generic http response redirect (from django.http import HttpResponse) , but its too much work"""
 
@@ -18,6 +18,8 @@ from django.contrib import messages
 It works but it redirects to login page instead of a intended 403 forbidden error , so if it works dont fix it '''
 
 #CHanged the login view to CUstomForms in forms.py
+
+
 
 def login_view(request):
     form = LoginForm(request.POST or None)
@@ -116,6 +118,7 @@ def faculty_dashboard(request):
 def student_dashboard(request):
     if request.user.role != "student" :
         raise PermissionDenied
+    context = get_student_context(request.user)
     return render(request, "users/student_dashboard.html")
 
 @login_required
