@@ -14,6 +14,7 @@ from django.contrib import messages
 from student.utils import get_student_context
 from .utils import is_admin, is_faculty, is_student, is_faculty_or_admin,get_admin_summary
 from task.views import handle_task_creation
+from users.models import CustomUser
 
 
 """we could also use the generic http response redirect (from django.http import HttpResponse) , but its too much work"""
@@ -77,13 +78,16 @@ def admin_dashboard(request):
                 return redirect('admin_dashboard')
 
     if request.method == "POST" and 'create_faculty' in request.POST:
-        faculty_form = StudentForm(request.POST)
+        faculty_form = FacultyForm(request.POST)
         if faculty_form.is_valid():
-                faculty = faculty_form.save(commit=False)
-                faculty.user_id = request.session.pop('new_user_id', None)
-                faculty.save()
-                messages.success(request, f"Faculty '{faculty.user.username}' created successfully.")
-                return redirect('admin_dashboard')
+            faculty = faculty_form.save(commit=False)
+            faculty.user_id = request.session.pop('new_user_id', None)
+            # Get the user's email
+            user = CustomUser.objects.get(id=faculty.user_id)
+            faculty.email = user.email
+            faculty.save()
+            messages.success(request, f"Faculty '{faculty.user.username}' created successfully.")
+            return redirect('admin_dashboard')
     
     task_form, task_created = handle_task_creation(request)
     if task_created:
@@ -124,6 +128,21 @@ def student_list(request):
         )
     return render(request, 'students/student_list.html', {
         'students': students,
+        'q': q,
+    })
+
+@login_required
+@user_passes_test(is_admin)
+def faculty_list(request):
+    q = request.GET.get('q', '').strip()
+    faculties = Faculty.objects.all()
+    if q:
+        faculties = faculties.filter(
+            models.Q(user__username__icontains=q) |
+            models.Q(faculty_id__icontains=q)
+        )
+    return render(request, 'faculty/faculty_list.html', {
+        'faculties': faculties,
         'q': q,
     })
 

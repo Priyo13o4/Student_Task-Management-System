@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Faculty List</title>
+    <link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
+</head>
+<body>
+    <h1>Faculty List</h1>
+
+    <form method="GET" action="">
+        <input type="text" name="q" placeholder="Search faculty..." value="{{ q }}">
+        <button type="submit">Search</button>
+    </form>
+  
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Faculty ID</th>
+            <th>Department</th>
+            <th>Designation</th>
+            <th>Action</th>
+        </tr>
+        {% for faculty in faculties %}
+            <tr>
+                <td>{{ faculty.user.first_name }} {{ faculty.user.last_name }}</td>
+                <td>{{ faculty.faculty_id }}</td>
+                <td>{{ faculty.department }}</td>
+                <td>{{ faculty.designation }}</td>
+                <td>
+                    <a href="{% url 'manage_faculty' faculty.id %}">
+                        Manage
+                    </a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="5">No faculty found.</td></tr>
+        {% endfor %}
+    </table>
+
+    <p><a href="{% url 'admin_dashboard' %}">← Back to Admin Dashboard</a></p>
+</body>
+</html>
+  

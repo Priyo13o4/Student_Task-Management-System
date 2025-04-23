@@ -5,6 +5,18 @@
         <meta charset="UTF-8">
         <title>Admin Dashboard</title>
         <link rel = "stylesheet" href = "{% static 'css/admin_styles.css' %}">
+        <script>
+            function updateEmail() {
+                const userId = document.getElementById('id_user').value;
+                if (userId) {
+                    fetch(`/api/user-email/${userId}/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('id_email').value = data.email;
+                        });
+                }
+            }
+        </script>
     </head>
     <body> 
         {% if messages %} 
@@ -21,6 +33,7 @@
         <div class="topmenu">
             <a href="{% url 'logout' %}">Logout</a>
             <a href="{% url 'student_list' %}">Manage Students</a>
+            <a href="{% url 'faculty_list' %}">Manage Faculty</a>
         </div>
     </nav>
     <section id="Summary">

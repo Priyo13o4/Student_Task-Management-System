@@ -10,15 +10,15 @@ def validate_three_digit(value):
 class Faculty(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
     limit_choices_to={'role__in': ['faculty']},) #again you dont want a student to be a faculty lol
-    faculty_id = models.IntegerField(blank= True,null=True,unique=True,validators=[validate_three_digit])
+    faculty_id = models.IntegerField(null=True,unique=True, validators=[validate_three_digit])
     department = models.CharField(max_length=100, blank=True)
     designation = models.CharField(max_length=100, blank=True)
     email = models.EmailField(max_length=100, blank = True)
     phone_no = models.CharField(max_length = 15 ,null = True)
     courses = models.ManyToManyField(Course)
 
-
     def __str__(self):
         return self.user.username
+
     class Meta:
         verbose_name_plural = "Faculty" 
