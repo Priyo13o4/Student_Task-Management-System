@@ -16,7 +16,9 @@ class Student(models.Model):
         choices=[("UG", "Undergraduate"), ("PG", "Graduate")])
 
     def __str__(self):
-        return self.user.get_full_name()
+        if self.user.first_name or self.user.last_name:
+            return f"{self.user.first_name} {self.user.last_name} ({self.user.username})"
+        return self.user.username
     
 from courses.models import Course
 

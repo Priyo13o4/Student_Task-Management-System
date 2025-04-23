@@ -4,10 +4,10 @@
   </form>
   
   <table>
-    <tr><th>Username</th><th>Roll No.</th><th>Action</th></tr>
+    <tr><th>Name</th><th>Username/Roll No.</th><th>Action</th></tr>
     {% for student in students %}
       <tr>
-        <td>{{ student.user.username }}</td>
+        <td>{{ student.user.first_name }} {{ student.user.last_name }}</td>
         <td>{{ student.register_no }}</td>
         <td>
           <a href="{% url 'manage_student' student.id %}">
@@ -19,4 +19,6 @@
       <tr><td colspan="3">No students found.</td></tr>
     {% endfor %}
   </table>
+
+  <p><a href="{% url 'admin_dashboard' %}">← Back to Admin Dashboard</a></p>
   

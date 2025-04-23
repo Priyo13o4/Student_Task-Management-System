@@ -45,7 +45,7 @@ class GradeForm(forms.ModelForm):
         model = Grade
         fields = ['student', 'course', 'grade']
         widgets = {
-            'student': forms.Select(attrs={'class': 'form-control'}),
+            'student': forms.HiddenInput(),  # Hide this field and set it in the view
             'course': forms.Select(attrs={'class': 'form-control'}),
         }
 
@@ -55,10 +55,10 @@ class GradeForm(forms.ModelForm):
             grade_obj.save()
         return grade_obj
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, student=None, **kwargs):
         super().__init__(*args, **kwargs)
-        if 'student' in self.data:
-            student_id = self.data.get('student')
-            self.fields['course'].queryset = Course.objects.filter(
-                student__id=student_id
-            )
+        if student:
+            self.fields['student'].initial = student.id
+            self.fields['student'].widget = forms.HiddenInput()
+            # Only show courses for this student
+            self.fields['course'].queryset = student.courses.all()

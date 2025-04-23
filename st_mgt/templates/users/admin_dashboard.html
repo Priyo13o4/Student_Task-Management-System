@@ -15,7 +15,7 @@
             </ul>
         {% endif %}
     <div id="welcome">
-        Greetings : {{ request.user.username }}
+        Greetings : {{ request.user.first_name }} {{ request.user.last_name }} ({{ request.user.username }})
     </div>
     <nav id="profile_menu">
         <div class="topmenu">
