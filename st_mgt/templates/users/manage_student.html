@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Manage {{ student.user.username }}</title>
+  <link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
+</head>
+<body>
+  <h1>Manage {{ student.user.username }}</h1>
+  <p>Roll No: {{ student.register_no }}</p>
+  <p>Department: {{ student.department }}</p>
+  <p>Level: {{ student.level }}</p>
+  <p>Current GPA: {{ gpa }}</p>
+
+  <h2>Enrolled Courses</h2>
+  <ul>
+    {% for c in courses %}
+      <li>{{ c.name }} ({{ c.code }})</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Grades</h2>
+  <ul>
+    {% for g in grades %}
+      <li>{{ g.course.name }}: {{ g.grade }}</li>
+    {% empty %}
+      <li>No grades assigned yet.</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Assign / Update Grade</h2>
+  <form method="POST">
+    {% csrf_token %}
+    {{ grade_form.non_field_errors }}
+    {{ grade_form.as_p }}
+    <button type="submit" name="submit_grade">Save Grade</button>
+  </form>
+
+  <p><a href="{% url 'student_list' %}">← Back to Student List</a></p>
+</body>
+</html>

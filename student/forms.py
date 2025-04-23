@@ -1,6 +1,6 @@
-from student.models import Student
 from django import forms
-from student.models import Grade, GRADE_POINTS
+from student.models import Grade, GRADE_POINTS,Student
+from courses.models import Course
 from django.contrib.auth import get_user_model 
 #the other method of importing settings from django.config is only for models.py
 
@@ -54,3 +54,11 @@ class GradeForm(forms.ModelForm):
         if commit:
             grade_obj.save()
         return grade_obj
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'student' in self.data:
+            student_id = self.data.get('student')
+            self.fields['course'].queryset = Course.objects.filter(
+                student__id=student_id
+            )

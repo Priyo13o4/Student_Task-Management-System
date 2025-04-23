@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings  #importing custom user model here , same for task and other apps too 
 from courses.models import Course
 
+"""NOTES : FORGOT TO ADD NAME (IT was supposed to added from user but nvm)"""
 class Student(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, 
             limit_choices_to={'role__in': ['student']},)

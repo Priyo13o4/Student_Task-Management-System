@@ -19,6 +19,31 @@
 
     <section id="Grades">
         Grades
+        <ul>
+            <li><strong>Register Number:</strong> {{ student.register_no }}</li>
+            <li><strong>Department:</strong> {{ student.department }}</li>
+            <li><strong>Attendance:</strong> {{ student.attendance }}</li>
+            <li><strong>Level:</strong> {{ student.level }}</li>
+            <li><strong>GPA:</strong> {{ gpa }}</li>
+        </ul>
+
+        <h3>Enrolled Courses:</h3>
+        <ul>
+            {% for course in courses %}
+                <li>{{ course.name }} ({{ course.code }})</li>
+            {% empty %}
+                <li>No courses enrolled.</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Grades:</h3>
+        <ul>
+            {% for grade in grades %}
+                <li>{{ grade.course.name }} - {{ grade.grade }}</li>
+            {% empty %}
+                <li>No grades available.</li>
+            {% endfor %}
+        </ul>
     </section>
 </body>
 </html>
