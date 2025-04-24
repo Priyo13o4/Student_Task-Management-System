@@ -4,13 +4,12 @@ from django.conf import settings
 class Task(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    assigned_to = models.ForeignKey(
+    assigned_to = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        limit_choices_to={'role': 'student'}, #u dont wanna assign it to an admin or another faculty lmao
+        limit_choices_to={'role': 'student'},
         related_name='assigned_tasks',
-        null=True, blank=True
-        ) 
+        blank=True
+    )
 
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -20,7 +19,11 @@ class Task(models.Model):
         related_name='created_tasks'
     )
     due_date = models.DateField(null = True)
-    completed = models.BooleanField(default=False)
+    status = models.CharField(
+        max_length=20,
+        choices=[('Pending', 'Pending'), ('In Progress', 'In Progress'), ('Completed', 'Completed')],
+        default='Pending'
+    )
     priority = models.CharField(
         max_length=10,
         choices=[('Low', 'Low'), ('Medium', 'Medium'), ('High', 'High')]
