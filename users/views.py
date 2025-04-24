@@ -12,7 +12,7 @@ from .forms import LoginForm
 from users.forms import CustomUserCreationForm
 from django.contrib import messages
 from student.utils import get_student_context
-from .utils import is_admin, is_faculty, is_student, is_faculty_or_admin,get_admin_summary
+from .utils import is_admin, is_faculty, is_student, is_faculty_or_admin,get_admin_summary, get_faculty_context
 from task.views import handle_task_creation
 from users.models import CustomUser
 
@@ -106,7 +106,9 @@ def admin_dashboard(request):
 def faculty_dashboard(request):
     if request.user.role != "faculty" :
         raise PermissionDenied
-    return render(request, "users/faculty_dashboard.html")
+    
+    context = get_faculty_context(request.user)
+    return render(request, "users/faculty_dashboard.html", context)
 
 @login_required
 @user_passes_test(is_student)
