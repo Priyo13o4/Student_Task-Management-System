@@ -16,7 +16,7 @@ class FacultyForm(forms.ModelForm):
     
     class Meta:
         model = Faculty
-        fields = ['faculty_id', 'department', 'designation', 'email', 'phone_no', 'courses']
+        fields = ['faculty_id', 'department', 'designation', 'email', 'phone', 'courses']
         widgets = {
             'courses': forms.CheckboxSelectMultiple(),
             'email': forms.EmailInput(attrs={
