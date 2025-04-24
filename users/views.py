@@ -111,9 +111,25 @@ def faculty_dashboard(request):
 @login_required
 @user_passes_test(is_student)
 def student_dashboard(request):
-    if request.user.role != "student" :
+    if request.user.role != "student":
         raise PermissionDenied
+    
+    # Handle task completion
+    if request.method == "POST" and 'complete_task_id' in request.POST:
+        task_id = request.POST.get('complete_task_id')
+        try:
+            task = Task.objects.get(id=task_id, assigned_to=request.user)
+            task.status = "Completed"
+            task.save()
+            messages.success(request, f"Task '{task.title}' marked as completed.")
+        except Task.DoesNotExist:
+            messages.error(request, "Task not found.")
+    
     context = get_student_context(request.user)
+    tasks = Task.objects.filter(assigned_to=request.user)
+    context['tasks'] = tasks
+    context['pending_tasks'] = tasks.filter(status="Pending")
+    context['completed_tasks'] = tasks.filter(status="Completed")
     return render(request, "users/student_dashboard.html", context)
 
 @login_required
