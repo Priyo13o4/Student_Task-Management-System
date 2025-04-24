@@ -1,39 +1,44 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Manage {{faculty.user.first_name }} {{ faculty.user.last_name }}</title>
-  <link rel="stylesheet" href="{% static 'css/admin_styles.css' %}">
+    <meta charset="UTF-8">
+    <title>Manage Faculty</title>
+    <link rel="stylesheet" href="{% static 'css/admin_styles.css' %}">
 </head>
 <body>
-  <h1>Manage {{ faculty.user.first_name }} {{ faculty.user.last_name }} ({{ faculty.user.username }})</h1>
-  
-  <div class="faculty-info">
-    <p><strong>Name:</strong> {{ faculty.user.first_name }} {{ faculty.user.last_name }}</p>
-    <p><strong>Username:</strong> {{ faculty.user.username }}</p>
-    <p><strong>Faculty ID:</strong> {{ faculty.faculty_id }}</p>
-    <p><strong>Department:</strong> {{ faculty.department }}</p>
-    <p><strong>Designation:</strong> {{ faculty.designation }}</p>
-    <p><strong>Email:</strong> {{ faculty.email }}</p>
-    <p><strong>Phone Number:</strong> {{ faculty.phone_no }}</p>
-  </div>
+    <div class="manage-faculty-container">
+        <h1>Manage {{ faculty.user.first_name }} {{ faculty.user.last_name }}</h1>
+        <div class="faculty-info">
+            <p><strong>Name:</strong> {{ faculty.user.first_name }} {{ faculty.user.last_name }}</p>
+            <p><strong>Username:</strong> {{ faculty.user.username }}</p>
+            <p><strong>Faculty ID:</strong> {{ faculty.faculty_id }}</p>
+            <p><strong>Department:</strong> {{ faculty.department }}</p>
+            <p><strong>Designation:</strong> {{ faculty.designation }}</p>
+            <p><strong>Email:</strong> {{ faculty.email }}</p>
+            <p><strong>Phone Number:</strong> {{ faculty.phone_no }}</p>
+        </div>
 
-  <h2>Courses Taught</h2>
-  <ul>
-    {% for c in courses %}
-      <li>{{ c.name }} ({{ c.code }})</li>
-    {% endfor %}
-  </ul>
+        <h2>Assigned Courses</h2>
+        <ul>
+            {% for course in courses %}
+                <li>{{ course.name }} ({{ course.code }})</li>
+            {% empty %}
+                <li>No courses assigned yet.</li>
+            {% endfor %}
+        </ul>
 
-  <h2>Update Faculty Details</h2>
-  <form method="POST">
-    {% csrf_token %}
-    {{ course_form.non_field_errors }}
-    {{ course_form.as_p }}
-    <button type="submit" name="submit_course">Save Changes</button>
-  </form>
+        <h2>Assign Course</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ course_form.non_field_errors }}
+            {{ course_form.as_p }}
+            <button type="submit" name="submit_course">Assign Course</button>
+        </form>
 
-  <p><a href="{% url 'faculty_list' %}">← Back to Faculty List</a></p>
+        <div class="back-link-container">
+            <a href="{% url 'admin_dashboard' %}" class="back-link">← Back to admin_dashboard</a>
+        </div>
+    </div>
 </body>
 </html>
