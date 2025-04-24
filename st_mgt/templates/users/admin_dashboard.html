@@ -5,6 +5,7 @@
         <meta charset="UTF-8">
         <title>Admin Dashboard</title>
         <link rel = "stylesheet" href = "{% static 'css/admin_styles.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </head>
     <body> 
         {% if messages %} 
@@ -23,8 +24,8 @@
             <a href="{% url 'student_list' %}">Manage Students</a>
         </div>
     </nav>
-    <section id="Summary">
-        Summary
+  <section id="Summary">
+    <h2>Summary</h1>
 
         <h1>Total Students</h1>
             <p>{{total_students}}</p>
@@ -34,7 +35,26 @@
             <p>{{total_tasks}}</p>
         <h1>Total Courses</h1>
             <p>{{total_courses}}</p>
+    </section> 
+    <section id="Summary">
+        <div class="summary-card">
+            <h3>Total Students</h3>
+            <span>{{ total_students }}</span>
+        </div>
+        <div class="summary-card">
+            <h3>Total Faculty</h3>
+            <span>{{ total_faculty }}</span>
+        </div>
+        <div class="summary-card">
+            <h3>Total Tasks</h3>
+            <span>{{ total_tasks }}</span>
+        </div>
+        <div class="summary-card">
+            <h3>Total Courses</h3>
+            <span>{{ total_courses }}</span>
+        </div>
     </section>
+    
     <div></div>
     <section id="create-user">
         
