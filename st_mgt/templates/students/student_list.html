@@ -1,11 +1,10 @@
-<<<<<<< HEAD
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Manage Students</title>
-    <link rel="stylesheet" href="{% static 'css/admin_styles.css' %}">
+    <link rel = "stylesheet" href = "{% static 'css/admin_styles.css' %}">
 </head>
 <body>
 
@@ -30,32 +29,7 @@
         <tr><td colspan="3">No students found.</td></tr>
         {% endfor %}
     </table>
+    <p><a href="{% url 'admin_dashboard' %}">← Back to admin_dashboard</a></p>
 
 </body>
 </html>
-=======
-<form method="GET" action="">
-    <input type="text" name="q" placeholder="Search students..." value="{{ q }}">
-    <button type="submit">Search</button>
-  </form>
-  
-  <table>
-    <tr><th>Name</th><th>Username/Roll No.</th><th>Action</th></tr>
-    {% for student in students %}
-      <tr>
-        <td>{{ student.user.first_name }} {{ student.user.last_name }}</td>
-        <td>{{ student.register_no }}</td>
-        <td>
-          <a href="{% url 'manage_student' student.id %}">
-            Manage
-          </a>
-        </td>
-      </tr>
-    {% empty %}
-      <tr><td colspan="3">No students found.</td></tr>
-    {% endfor %}
-  </table>
-
-  <p><a href="{% url 'admin_dashboard' %}">← Back to Admin Dashboard</a></p>
-  
->>>>>>> dcd19e2435252c9df695ede76007c4fb5c972187
