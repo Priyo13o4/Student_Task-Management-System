@@ -5,7 +5,22 @@
         <meta charset="UTF-8">
         <title>Admin Dashboard</title>
         <link rel = "stylesheet" href = "{% static 'css/admin_styles.css' %}">
+<<<<<<< HEAD
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+=======
+        <script>
+            function updateEmail() {
+                const userId = document.getElementById('id_user').value;
+                if (userId) {
+                    fetch(`/api/user-email/${userId}/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('id_email').value = data.email;
+                        });
+                }
+            }
+        </script>
+>>>>>>> dcd19e2435252c9df695ede76007c4fb5c972187
     </head>
     <body> 
         {% if messages %} 
@@ -16,12 +31,13 @@
             </ul>
         {% endif %}
     <div id="welcome">
-        Greetings : {{ request.user.username }}
+        Greetings : {{ request.user.first_name }} {{ request.user.last_name }} ({{ request.user.username }})
     </div>
     <nav id="profile_menu">
         <div class="topmenu">
             <a href="{% url 'logout' %}">Logout</a>
             <a href="{% url 'student_list' %}">Manage Students</a>
+            <a href="{% url 'faculty_list' %}">Manage Faculty</a>
         </div>
     </nav>
   <section id="Summary">

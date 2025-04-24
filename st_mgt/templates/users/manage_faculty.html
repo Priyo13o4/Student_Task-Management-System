@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Manage {{faculty.user.first_name }} {{ faculty.user.last_name }}</title>
+  <link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
+</head>
+<body>
+  <h1>Manage {{ faculty.user.first_name }} {{ faculty.user.last_name }} ({{ faculty.user.username }})</h1>
+  
+  <div class="faculty-info">
+    <p><strong>Name:</strong> {{ faculty.user.first_name }} {{ faculty.user.last_name }}</p>
+    <p><strong>Username:</strong> {{ faculty.user.username }}</p>
+    <p><strong>Faculty ID:</strong> {{ faculty.faculty_id }}</p>
+    <p><strong>Department:</strong> {{ faculty.department }}</p>
+    <p><strong>Designation:</strong> {{ faculty.designation }}</p>
+    <p><strong>Email:</strong> {{ faculty.email }}</p>
+    <p><strong>Phone Number:</strong> {{ faculty.phone_no }}</p>
+  </div>
+
+  <h2>Courses Taught</h2>
+  <ul>
+    {% for c in courses %}
+      <li>{{ c.name }} ({{ c.code }})</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Update Faculty Details</h2>
+  <form method="POST">
+    {% csrf_token %}
+    {{ course_form.non_field_errors }}
+    {{ course_form.as_p }}
+    <button type="submit" name="submit_course">Save Changes</button>
+  </form>
+
+  <p><a href="{% url 'faculty_list' %}">← Back to Faculty List</a></p>
+</body>
+</html>

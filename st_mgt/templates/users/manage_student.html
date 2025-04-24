@@ -2,15 +2,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Manage {{ student.user.username }}</title>
+  <title>Manage {{ student.user.first_name }} {{ student.user.last_name }}</title>
   <link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
 </head>
 <body>
-  <h1>Manage {{ student.user.username }}</h1>
-  <p>Roll No: {{ student.register_no }}</p>
-  <p>Department: {{ student.department }}</p>
-  <p>Level: {{ student.level }}</p>
-  <p>Current GPA: {{ gpa }}</p>
+  <h1>Manage {{ student.user.first_name }} {{ student.user.last_name }} ({{ student.user.username }})</h1>
+  <p><strong>Name:</strong> {{ student.user.first_name }} {{ student.user.last_name }}</p>
+  <p><strong>Roll No:</strong> {{ student.register_no }}</p>
+  <p><strong>Department:</strong> {{ student.department }}</p>
+  <p><strong>Level:</strong> {{ student.level }}</p>
+  <p><strong>Current GPA:</strong> {{ gpa }}</p>
 
   <h2>Enrolled Courses</h2>
   <ul>

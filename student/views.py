@@ -27,10 +27,10 @@ def manage_student(request, student_id):
     student = get_object_or_404(Student, pk=student_id)
     grades = student.grades.all()
     courses = student.courses.all()
-    gpa = student.gpa
+    gpa = calculate_gpa(student)# This will ensure we have the most up-to-date GPA
 
     # Handle grade assignment
-    form = GradeForm(request.POST or None)
+    form = GradeForm(request.POST or None, student=student)
     if request.method == 'POST' and 'submit_grade' in request.POST:
         if form.is_valid():
             grade = form.save()

@@ -8,7 +8,7 @@
 </head>
 <body>
     <div id="welcome">
-        Welcome Student: {{ request.user.username }}
+        Welcome : {{ request.user.first_name }} {{ request.user.last_name }} ({{ request.user.username }})
     </div>
 
     <nav id="profile_menu">
