@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Faculty List</title>
-    <link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_styles.css' %}">
 </head>
 <body>
     <h1>Faculty List</h1>
@@ -15,11 +15,11 @@
   
     <table>
         <tr>
-            <th>Name</th>
-            <th>Faculty ID</th>
-            <th>Department</th>
-            <th>Designation</th>
-            <th>Action</th>
+            <td>Name</td>
+            <td>Faculty ID</td>
+            <td>Department</td>
+            <td>Designation</td>
+            <td>Action</td>
         </tr>
         {% for faculty in faculties %}
             <tr>
