@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Course</title>
+    <link rel="stylesheet" href="{% static 'css/admin_styles.css' %}">
+</head>
+<body>
+    <h1>Delete Course</h1>
+    
+    <p>Are you sure you want to delete the course "{{ course.name }} ({{ course.code }})"?</p>
+    
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="delete-button">Delete Course</button>
+        <a href="{% url 'course_list' %}" class="cancel-button">Cancel</a>
+    </form>
+
+    <p><a href="{% url 'course_list' %}">← Back to Course List</a></p>
+</body>
+</html> 

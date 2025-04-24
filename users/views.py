@@ -17,6 +17,7 @@ from task.views import handle_task_creation
 from users.models import CustomUser
 
 
+
 """we could also use the generic http response redirect (from django.http import HttpResponse) , but its too much work"""
 
 '''note 2 : tried Adding permission denied if someone access dashboard directly from URL from other account
@@ -148,9 +149,15 @@ def faculty_list(request):
 
 @login_required
 @user_passes_test(is_faculty_or_admin)
-def course_list(request):
-    courses = Course.objects.all()
-    return render(request, 'courses/course_list.html', {'courses': courses})
+def task_list(request):
+    q = request.GET.get('q', '').strip()
+    tasks = Task.objects.all()
+    if q:
+        tasks = tasks.filter(
+            models.Q(title__icontains=q) |
+            models.Q(description__icontains=q)
+        )
+    return render(request, 'tasks/task_list.html', {'tasks': tasks, 'q': q})
 
 @login_required
 def student_grades(request):

@@ -23,5 +23,6 @@ urlpatterns = [
     path('students/', include('student.urls')),
     path('tasks/', include('task.urls')),
     path('faculty/', include('faculty.urls')),
+    path('courses/', include('courses.urls')),
     path('', home_redirect),
 ]

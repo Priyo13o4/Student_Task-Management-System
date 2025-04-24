@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 CustomUser = get_user_model() 
 class FacultyForm(forms.ModelForm):
     user = forms.ModelChoiceField(
-        queryset=CustomUser.objects.filter(role='faculty'),
+        queryset=CustomUser.objects.filter(role='faculty').exclude(faculty__isnull=False),
         widget=forms.Select(attrs={
             'class': 'form-control',
             'onchange': 'updateEmail();'

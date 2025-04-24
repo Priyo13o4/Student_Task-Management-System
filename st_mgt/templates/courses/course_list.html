@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Courses</title>
+    <link rel = "stylesheet" href = "{% static 'css/admin_styles.css' %}">
+</head>
+<body>
+
+    <form method="GET" action="">
+        <input type="text" name="q" placeholder="Search courses..." value="{{ q }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <table>
+        <tr><th>Course Name</th><th>Course Code</th><th>Level</th><th>Action</th></tr>
+        {% for course in courses %}
+        <tr>
+            <td>{{ course.name }}</td>
+            <td>{{ course.code }}</td>
+            <td>{{ course.level }}</td>
+            <td>
+                <a href="{% url 'delete_course' course.id %}" class="delete-link">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">No courses found.</td></tr>  
+        {% endfor %}
+    </table>
+    <p><a href="{% url 'admin_dashboard' %}">← Back to admin_dashboard</a></p>
+
+</body>
+</html>

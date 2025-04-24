@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Tasks</title>
+    <link rel = "stylesheet" href = "{% static 'css/admin_styles.css' %}">
+</head>
+<body>
+
+    <form method="GET" action="">
+        <input type="text" name="q" placeholder="Search tasks..." value="{{ q }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <table>
+        <tr><th>Title</th><th>Description</th><th>Action</th></tr>
+        {% for task in tasks %}
+        <tr>
+            <td>{{ task.title }}</td>
+            <td>{{ task.description }}</td>
+            <td>
+                <a href="{% url 'manage_task' task.id %}">
+                    Manage
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3">No tasks found.</td></tr>
+        {% endfor %}
+    </table>
+    <p><a href="{% url 'admin_dashboard' %}">← Back to admin_dashboard</a></p>
+
+</body>
+</html>
