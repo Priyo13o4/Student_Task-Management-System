@@ -1,42 +1,49 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Manage {{ student.user.first_name }} {{ student.user.last_name }}</title>
-  <link rel="stylesheet" href= "{% static 'css/admin_styles.css' %}">
+    <meta charset="UTF-8">
+    <title>Manage Student</title>
+    <link rel="stylesheet" href="{% static 'css/admin_styles.css' %}">
 </head>
 <body>
-  <h1>Manage {{ student.user.first_name }} {{ student.user.last_name }} ({{ student.user.username }})</h1>
-  <p><strong>Name:</strong> {{ student.user.first_name }} {{ student.user.last_name }}</p>
-  <p><strong>Roll No:</strong> {{ student.register_no }}</p>
-  <p><strong>Department:</strong> {{ student.department }}</p>
-  <p><strong>Level:</strong> {{ student.level }}</p>
-  <p><strong>Current GPA:</strong> {{ gpa }}</p>
+    <div class="manage-student-container">
+        <h1>Manage {{ student.user.first_name }} {{ student.user.last_name }} ({{ student.user.username }})</h1>
+        <div class="student-info">
+            <p><strong>Name:</strong> {{ student.user.first_name }} {{ student.user.last_name }}</p>
+            <p><strong>Roll No:</strong> {{ student.register_no }}</p>
+            <p><strong>Department:</strong> {{ student.department }}</p>
+            <p><strong>Level:</strong> {{ student.level }}</p>
+            <p><strong>Current GPA:</strong> {{ gpa }}</p>
+        </div>
 
-  <h2>Enrolled Courses</h2>
-  <ul>
-    {% for c in courses %}
-      <li>{{ c.name }} ({{ c.code }})</li>
-    {% endfor %}
-  </ul>
+        <h2>Enrolled Courses</h2>
+        <ul>
+            {% for c in courses %}
+                <li>{{ c.name }} ({{ c.code }})</li>
+            {% endfor %}
+        </ul>
 
-  <h2>Grades</h2>
-  <ul>
-    {% for g in grades %}
-      <li>{{ g.course.name }}: {{ g.grade }}</li>
-    {% empty %}
-      <li>No grades assigned yet.</li>
-    {% endfor %}
-  </ul>
+        <h2>Grades</h2>
+        <ul>
+            {% for g in grades %}
+                <li>{{ g.course.name }}: {{ g.grade }}</li>
+            {% empty %}
+                <li>No grades assigned yet.</li>
+            {% endfor %}
+        </ul>
 
-  <h2>Assign / Update Grade</h2>
-  <form method="POST">
-    {% csrf_token %}
-    {{ grade_form.non_field_errors }}
-    {{ grade_form.as_p }}
-    <button type="submit" name="submit_grade">Save Grade</button>
-  </form>
+        <h2>Assign / Update Grade</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ grade_form.non_field_errors }}
+            {{ grade_form.as_p }}
+            <button type="submit" name="submit_grade">Save Grade</button>
+        </form>
 
-  <p><a href="{% url 'student_list' %}">← Back to Student List</a></p>
+        <div class="back-link-container">
+            <a href="{% url 'admin_dashboard' %}" class="back-link">← Back to admin_dashboard</a>
+        </div>
+    </div>
 </body>
 </html>

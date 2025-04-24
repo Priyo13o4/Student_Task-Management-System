@@ -7,14 +7,18 @@
     <link rel = "stylesheet" href = "{% static 'css/admin_styles.css' %}">
 </head>
 <body>
-
+    <h1>Student List</h1>   
     <form method="GET" action="">
         <input type="text" name="q" placeholder="Search students..." value="{{ q }}">
         <button type="submit">Search</button>
     </form>
 
     <table>
-        <tr><th>Username</th><th>Roll No.</th><th>Action</th></tr>
+        <tr>
+            <th>Username</th>
+            <th>Roll No.</th>
+            <th>Action</th>
+        </tr>
         {% for student in students %}
         <tr>
             <td>{{ student.user.username }}</td>
@@ -29,7 +33,8 @@
         <tr><td colspan="3">No students found.</td></tr>
         {% endfor %}
     </table>
-    <p><a href="{% url 'admin_dashboard' %}">← Back to admin_dashboard</a></p>
-
+    <div class="back-link-container">
+        <a href="{% url 'admin_dashboard' %}" class="back-link">← Back to admin_dashboard</a>
+    </div>
 </body>
 </html>
