@@ -25,7 +25,7 @@ from courses.models import Course
 class Grade(models.Model):
     student = models.ForeignKey("Student", on_delete=models.CASCADE, related_name="grades")
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="grades")
-    grade = models.CharField(max_length=2)  # e.g., A, B, C, D, F  
+    grade = models.CharField(max_length=2, null=True, blank=True)  # e.g., A, B, C, D, F  
 
     class Meta:
         unique_together = ('student', 'course')  # For one grade per student per course

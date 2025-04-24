@@ -15,6 +15,7 @@ from student.utils import get_student_context
 from .utils import is_admin, is_faculty, is_student, is_faculty_or_admin,get_admin_summary, get_faculty_context
 from task.views import handle_task_creation
 from users.models import CustomUser
+from task.forms import TaskForm
 
 
 """we could also use the generic http response redirect (from django.http import HttpResponse) , but its too much work"""
@@ -107,7 +108,15 @@ def faculty_dashboard(request):
     if request.user.role != "faculty" :
         raise PermissionDenied
     
-    context = get_faculty_context(request.user)
+    faculty = Faculty.objects.get(user=request.user)
+    context = get_faculty_context(faculty)
+    
+    # Handle task creation using the same function as admin dashboard
+    task_form, task_created = handle_task_creation(request)
+    if task_created:
+        return redirect('faculty_dashboard')
+    
+    context['task_form'] = task_form
     return render(request, "users/faculty_dashboard.html", context)
 
 @login_required
