@@ -38,7 +38,9 @@
         {% endfor %}
     </table>
 
-    <p><a href="{% url 'admin_dashboard' %}">← Back to Admin Dashboard</a></p>
+    <div class="back-link-container">
+        <a href="{% url 'admin_dashboard' %}" class="back-link">← Back to Admin Dashboard</a>
+    </div>
 </body>
 </html>
   
