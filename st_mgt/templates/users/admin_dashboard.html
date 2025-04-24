@@ -22,8 +22,8 @@
         </script>
 >>>>>>> dcd19e2435252c9df695ede76007c4fb5c972187
     </head>
-    <body> 
-        {% if messages %} 
+    <body>
+        {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
                     <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> <!-- This will print when user creation is successful-->
@@ -51,7 +51,7 @@
             <p>{{total_tasks}}</p>
         <h1>Total Courses</h1>
             <p>{{total_courses}}</p>
-    </section> 
+    </section>
     <section id="Summary">
         <div class="summary-card">
             <h3>Total Students</h3>
@@ -70,10 +70,10 @@
             <span>{{ total_courses }}</span>
         </div>
     </section>
-    
+
     <div></div>
     <section id="create-user">
-        
+
         <h2>Create New User</h2>
         <form method="POST">
             {% csrf_token %}
@@ -108,7 +108,7 @@
             <button type="submit" name="create_task">Create task</button>
         </form>
     </section>
-    
+
     </body>
-    
+
 </html>
