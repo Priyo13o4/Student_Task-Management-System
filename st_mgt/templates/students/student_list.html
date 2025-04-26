@@ -4,37 +4,83 @@
 <head>
     <meta charset="UTF-8">
     <title>Manage Students</title>
-    <link rel = "stylesheet" href = "{% static 'css/admin_styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_styles.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Search and select courses...",
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
 </head>
 <body>
-    <h1>Student List</h1>   
-    <form method="GET" action="">
-        <input type="text" name="q" placeholder="Search students..." value="{{ q }}">
-        <button type="submit">Search</button>
-    </form>
-
-    <table>
-        <tr>
-            <th>Username</th>
-            <th>Roll No.</th>
-            <th>Action</th>
-        </tr>
-        {% for student in students %}
-        <tr>
-            <td>{{ student.user.username }}</td>
-            <td>{{ student.register_no }}</td>
-            <td>
-                <a href="{% url 'manage_student' student.id %}">
-                    Manage
-                </a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="3">No students found.</td></tr>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}
-    </table>
+    </ul>
+    {% endif %}
+
+    <h1>Student List</h1>   
+    <div class="search-container">
+        <form method="GET" action="" class="search-form">
+            <input type="text" name="q" placeholder="Search students by name, username, or roll number..." value="{{ q }}" class="search-input">
+            <button type="submit" class="search-button">Search</button>
+            {% if q %}
+                <a href="{% url 'student_list' %}" class="clear-search">Clear Search</a>
+            {% endif %}
+        </form>
+    </div>
+
+    <div class="student-list-container">
+        <h2>Students ({{ total_students }} total)</h2>
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Roll No.</th>
+                <th>Action</th>
+            </tr>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.user.username }}</td>
+                <td>{{ student.register_no }}</td>
+                <td>
+                    <a href="{% url 'manage_student' student.id %}" class="manage-link">
+                        Manage
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3">No students found.</td></tr>
+            {% endfor %}
+        </table>
+
+        {% if has_more %}
+            <div class="view-more-container">
+                <a href="?show_all=1{% if q %}&q={{ q }}{% endif %}" class="view-more-button">View All Students</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Student Creation Form -->
+    <div class="creation-form">
+        <h2>Create New Student</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ student_form.as_p }}
+            <button type="submit" name="create_student">Create Student</button>
+        </form>
+    </div>
+
     <div class="back-link-container">
         <a href="{% url 'admin_dashboard' %}" class="back-link">← Back to admin_dashboard</a>
     </div>
 </body>
 </html>
+    

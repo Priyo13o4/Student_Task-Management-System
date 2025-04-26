@@ -3,14 +3,53 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from .models import Course
 from users.utils import is_admin
+from .forms import CourseForm
+from django.db.models import Q
+from faculty.models import Faculty
 
 # Create your views here.
 
 @login_required
 @user_passes_test(is_admin)
 def course_list(request):
+    # Handle course creation
+    if request.method == 'POST' and 'create_course' in request.POST:
+        course_form = CourseForm(request.POST)
+        if course_form.is_valid():
+            course = course_form.save()
+            
+            # Get the selected faculty members
+            selected_faculty = course_form.cleaned_data.get('faculty', [])
+            
+            # Update each faculty's courses
+            for faculty_user in selected_faculty:
+                try:
+                    faculty = Faculty.objects.get(user=faculty_user)
+                    faculty.courses.add(course)
+                except Faculty.DoesNotExist:
+                    # If faculty profile doesn't exist, create it
+                    faculty = Faculty.objects.create(user=faculty_user)
+                    faculty.courses.add(course)
+            
+            messages.success(request, f"Course '{course.name}' created successfully.")
+            return redirect('course_list')
+    else:
+        course_form = CourseForm()
+
+    # Handle search
+    q = request.GET.get('q', '').strip()
     courses = Course.objects.all()
-    return render(request, 'courses/course_list.html', {'courses': courses})
+    if q:
+        courses = courses.filter(
+            Q(name__icontains=q) |
+            Q(code__icontains=q)
+        )
+
+    return render(request, 'courses/course_list.html', {
+        'courses': courses,
+        'q': q,
+        'course_form': course_form,
+    })
 
 @login_required
 @user_passes_test(is_admin)

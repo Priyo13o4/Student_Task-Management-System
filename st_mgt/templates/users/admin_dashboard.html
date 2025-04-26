@@ -72,33 +72,7 @@
                 </form>
             </div>
         </section>
-
-        <section id="create-student" class="card mb-4">
-            <div class="card-header">
-                <h2>Create New Student</h2>
-            </div>
-            <div class="card-body">
-                <form method="POST">
-                    {% csrf_token %}
-                    {{ student_form.as_p }}
-                    <button type="submit" name="create_student" class="btn btn-primary">Create Student</button>
-                </form>
-            </div>
-        </section>
-
-        <section id="create-faculty" class="card mb-4">
-            <div class="card-header">
-                <h2>Create New Faculty</h2>
-            </div>
-            <div class="card-body">
-                <form method="POST">
-                    {% csrf_token %}
-                    {{ faculty_form.as_p }}
-                    <button type="submit" name="create_faculty" class="btn btn-primary">Create Faculty</button>
-                </form>
-            </div>
-        </section>
-
+        
         <section id="create-task" class="card mb-4">
             <div class="card-header">
                 <h2>Create a Task</h2>

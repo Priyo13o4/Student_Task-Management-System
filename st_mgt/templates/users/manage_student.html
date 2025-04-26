@@ -5,25 +5,60 @@
     <meta charset="UTF-8">
     <title>Manage Student</title>
     <link rel="stylesheet" href="{% static 'css/admin_styles.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 <body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> <!-- This will print when user creation is successful-->
+        {% endfor %}
+    </ul>
+    {% endif %}
     <div class="manage-student-container">
+        <form method="POST" id="updateForm">
+            {% csrf_token %}
         <h1>Manage {{ student.user.first_name }} {{ student.user.last_name }} ({{ student.user.username }})</h1>
         <div class="student-info">
-            <p><strong>Name:</strong> {{ student.user.first_name }} {{ student.user.last_name }}</p>
-            <p><strong>Roll No:</strong> {{ student.register_no }}</p>
-            <p><strong>Department:</strong> {{ student.department }}</p>
-            <p><strong>Level:</strong> {{ student.level }}</p>
+            <p><strong>First Name:</strong> <input type="text" name="first_name" value="{{ student.user.first_name }}" onchange="enableUpdateButton()"></p>
+            <p><strong>Last Name:</strong> <input type="text" name="last_name" value="{{ student.user.last_name }}" onchange="enableUpdateButton()"></p>
+            <p><strong>Register No:</strong> <input type="text" name="register_no" value="{{ student.register_no }}" onchange="enableUpdateButton()"></p>
+            <p><strong>Department:</strong> <input type="text" name="department" value="{{ student.department }}" onchange="enableUpdateButton()"></p>
+            <p><strong>Level:</strong> 
+                <select name="level" onchange="enableUpdateButton()">
+                    <option value="UG" {% if student.level == 'UG' %}selected{% endif %}>Undergraduate</option>
+                    <option value="PG" {% if student.level == 'PG' %}selected{% endif %}>Graduate</option>
+                </select>
+            </p>
             <p><strong>Current GPA:</strong> {{ gpa }}</p>
         </div>
+        <button type="submit" name="update_details" id="updateButton" disabled>Update Details</button>
+        </form>
 
         <h2>Enrolled Courses</h2>
-        <ul>
+        <ul class="course-list">
             {% for c in courses %}
-                <li>{{ c.name }} ({{ c.code }})</li>
+                <li>
+                    {{ c.name }} ({{ c.code }})
+                    <button class="remove-course" data-course-id="{{ c.id }}" data-student-id="{{ student.id }}" title="Remove course">
+                        ×
+                    </button>
+                </li>
+            {% empty %}
+                <li>No courses assigned yet.</li>
             {% endfor %}
         </ul>
 
+        <h2>Assign Course</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ course_form.non_field_errors }}
+            <div class="course-assignment">
+                {{ course_form.course }}
+            </div>
+            <button type="submit" name="submit_course">Assign Course</button>
+        </form>
+        
         <h2>Grades</h2>
         <ul>
             {% for g in grades %}
@@ -41,9 +76,18 @@
             <button type="submit" name="submit_grade">Save Grade</button>
         </form>
 
+        <form method="POST" action="{% url 'delete_student' student.id %}">
+            {% csrf_token %}
+            <button type="submit" class="delete-button">Delete Student</button>
+        </form>
+
         <div class="back-link-container">
             <a href="{% url 'admin_dashboard' %}" class="back-link">← Back to admin_dashboard</a>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{% static 'js/student_manage.js' %}"></script>
 </body>
 </html>
