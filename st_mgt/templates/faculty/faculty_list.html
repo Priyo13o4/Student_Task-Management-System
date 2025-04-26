@@ -6,6 +6,25 @@
     <link rel="stylesheet" href="{% static 'css/admin_styles.css' %}">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="{% url 'admin_dashboard' %}" class="navbar-brand">Student Management System</a>
+            <div class="navbar-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="navbar-menu">
+                <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+                <a href="{% url 'student_list' %}">Students</a>
+                <a href="{% url 'faculty_list' %}" class="active">Faculty</a>
+                <a href="{% url 'course_list' %}">Courses</a>
+            </div>
+            <div class="user-info">
+                <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+            </div>
+        </div>
+    </nav>
     <h1>Faculty List</h1>
 
     <form method="GET" action="">
@@ -41,6 +60,12 @@
     <div class="back-link-container">
         <a href="{% url 'admin_dashboard' %}" class="back-link">← Back to Admin Dashboard</a>
     </div>
+    <script>
+        function toggleMenu() {
+            const menu = document.querySelector('.navbar-menu');
+            menu.classList.toggle('active');
+        }   
+    </script>
 </body>
 </html>
   
