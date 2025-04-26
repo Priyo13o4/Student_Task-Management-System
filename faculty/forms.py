@@ -41,11 +41,21 @@ class FacultyForm(forms.ModelForm):
         label="Select Faculty User"
     )
     
+    courses = forms.ModelMultipleChoiceField(
+        queryset=Course.objects.all(),
+        widget=forms.SelectMultiple(attrs={
+            'class': 'select2',
+            'data-placeholder': 'Search and select courses...',
+            'style': 'width: 100%;'
+        }),
+        required=False,
+        label="Select Courses"
+    )
+    
     class Meta:
         model = Faculty
         fields = ['user', 'faculty_id', 'department', 'designation', 'email', 'phone', 'courses']
         widgets = {
-            'courses': forms.CheckboxSelectMultiple(),
             'email': forms.EmailInput(attrs={
                 'readonly': 'readonly',
                 'class': 'form-control',
@@ -92,5 +102,7 @@ class FacultyForm(forms.ModelForm):
             instance.email = instance.user.email
         if commit:
             instance.save()
+            # Save the many-to-many relationship
+            self.save_m2m()
         return instance
     
