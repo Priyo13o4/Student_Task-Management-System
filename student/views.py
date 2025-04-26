@@ -5,12 +5,14 @@ from django.contrib import messages
 from django.db.models import Q
 from .models import Student, calculate_gpa, Grade, Course
 from .forms import GradeForm, StudentForm
-from users.utils import is_faculty_or_admin
+from users.utils import is_faculty_or_admin, is_admin
 from task.models import Task
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from courses.forms import CourseForm
+
+
 
 
 @login_required
@@ -134,7 +136,7 @@ def manage_student(request, student_id):
     else:
         form = GradeForm(student=student)
 
-    return render(request, 'users/manage_student.html', {
+    return render(request, 'students/manage_student.html', {
         'student': student,
         'grades':  grades,
         'courses': courses,
@@ -144,15 +146,16 @@ def manage_student(request, student_id):
     })
 
 @login_required
-@user_passes_test(is_faculty_or_admin)
+@user_passes_test(is_admin)
 def delete_student(request, student_id):
-    student = get_object_or_404(Student, pk=student_id)
     if request.method == 'POST':
-        student_name = student.user.username
-        student.delete()
-        messages.success(request, f"Student '{student_name}' has been deleted.")
-        return redirect('student_list')
-    return render(request, 'student/confirm_delete.html', {'student': student})
+        student = get_object_or_404(Student, id=student_id)
+        try:
+            student.user.delete()  # This will also delete the student due to CASCADE
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
 @login_required
 @user_passes_test(is_faculty_or_admin)

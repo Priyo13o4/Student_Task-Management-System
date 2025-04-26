@@ -28,10 +28,12 @@ def get_faculty_context(faculty):
     from faculty.models import Faculty
 
     # Get faculty's courses
-    faculty_courses = Course.objects.filter(faculty=faculty.user)
+    faculty_courses = faculty.courses.all()
     
-    # Get students enrolled in faculty's courses
-    enrolled_students = Student.objects.filter(courses__in=faculty_courses).distinct()
+    # Get students enrolled in faculty's courses using a more precise query
+    enrolled_students = Student.objects.filter(
+        courses__in=faculty_courses
+    ).distinct().count()
     
     # Get tasks created by faculty using faculty.user
     faculty_tasks = Task.objects.filter(created_by=faculty.user)
@@ -51,7 +53,7 @@ def get_faculty_context(faculty):
     return {
         'faculty': faculty,
         'courses': faculty_courses,
-        'students': enrolled_students,
+        'students_count': enrolled_students,
         'tasks': faculty_tasks,
         'pending_grades': pending_grades.count(),
         'pending_grades_list': pending_grades_list,

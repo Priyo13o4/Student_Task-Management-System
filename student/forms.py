@@ -34,9 +34,12 @@ class CourseAssignmentForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
     user = forms.ModelChoiceField(
         queryset=CustomUser.objects.filter(role='student').exclude(student__isnull=False),
-        widget=forms.Select(attrs={'class': 'form-control'}),
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+            'placeholder': 'Select a student user'
+        }),
         required=True,
-        label="Select Student User"
+        label="Student User *"
     )
     
     courses = forms.ModelMultipleChoiceField(
@@ -46,7 +49,8 @@ class StudentForm(forms.ModelForm):
             'data-placeholder': 'Search and select courses...',
             'style': 'width: 100%;'
         }),
-        required=False
+        required=False,
+        label="Courses"
     )
 
     class Meta:
@@ -60,7 +64,25 @@ class StudentForm(forms.ModelForm):
             'level', 
         ]
         widgets = {
-            'level': forms.Select(attrs={'class': 'form-control'}),
+            'register_no': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter registration number (ex : 20231CAI0149)'
+            }),
+            'department': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter department name'
+            }),
+            
+            'level': forms.Select(attrs={
+                'class': 'form-control',
+                'placeholder': 'Select student level'
+            }),
+        }
+        labels = {
+            'register_no': 'Registration Number *',
+            'department': 'Department',
+            'attendance': 'Attendance',
+            'level': 'Level *'
         }
 
 GRADE_CHOICES = [

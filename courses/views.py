@@ -6,6 +6,7 @@ from users.utils import is_admin
 from .forms import CourseForm
 from django.db.models import Q
 from faculty.models import Faculty
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -54,10 +55,11 @@ def course_list(request):
 @login_required
 @user_passes_test(is_admin)
 def delete_course(request, course_id):
-    course = get_object_or_404(Course, pk=course_id)
     if request.method == 'POST':
-        course_name = course.name
-        course.delete()
-        messages.success(request, f"Course '{course_name}' has been deleted.")
-        return redirect('course_list')
-    return render(request, 'courses/confirm_delete.html', {'course': course})
+        course = get_object_or_404(Course, id=course_id)
+        try:
+            course.delete()
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})

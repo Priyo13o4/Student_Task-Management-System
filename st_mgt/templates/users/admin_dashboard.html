@@ -12,7 +12,7 @@
         {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> <!-- This will print when user creation is successful-->
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
                 {% endfor %}
             </ul>
         {% endif %}
@@ -40,18 +40,6 @@
     <div id="welcome">
         Greetings : {{ request.user.first_name }} {{ request.user.last_name }} ({{ request.user.username }})
     </div>
-  <section id="Summary">
-    <h2>Summary</h1>
-
-        <h1>Total Students</h1>
-            <p>{{total_students}}</p>
-        <h1>Total Faculty</h1>
-            <p>{{total_faculty}}</p>
-        <h1>Total Tasks</h1>
-            <p>{{total_tasks}}</p>
-        <h1>Total Courses</h1>
-            <p>{{total_courses}}</p>
-    </section>
     <section id="Summary">
         <div class="summary-card">
             <h3>Total Students</h3>
@@ -84,71 +72,14 @@
                 </form>
             </div>
         </section>
-        
-        <section id="create-task" class="card mb-4">
-            <div class="card-header">
-                <h2>Create a Task</h2>
-            </div>
-            <div class="card-body">
-                <form method="POST">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="id_title" class="form-label">Title</label>
-                        {{ task_form.title }}
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_description" class="form-label">Description</label>
-                        {{ task_form.description }}
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_due_date" class="form-label">Due Date</label>
-                        {{ task_form.due_date }}
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_priority" class="form-label">Priority</label>
-                        {{ task_form.priority }}
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Assign To</label>
-                        <div class="form-check">
-                            {{ task_form.assign_to_all }}
-                            <label class="form-check-label" for="id_assign_to_all">Assign to all students</label>
-                        </div>
-                        <div class="mt-2">
-                            <label class="form-label">Or select specific students:</label>
-                            <div class="student-selection">
-                                {{ task_form.assigned_to }}
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" name="create_task" class="btn btn-primary">Create Task</button>
-                </form>
-            </div>
-        </section>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Add JavaScript to handle the "Assign to all" checkbox
-        document.addEventListener('DOMContentLoaded', function() {
-            const assignToAllCheckbox = document.getElementById('id_assign_to_all');
-            const studentSelection = document.querySelector('.student-selection');
-            
-            assignToAllCheckbox.addEventListener('change', function() {
-                if (this.checked) {
-                    studentSelection.style.display = 'none';
-                } else {
-                    studentSelection.style.display = 'block';
-                }
-            });
-        });
+        function toggleMenu() {
+            const menu = document.querySelector('.navbar-menu');
+            menu.classList.toggle('active');
+        }   
     </script>
-        <script>
-            function toggleMenu() {
-                const menu = document.querySelector('.navbar-menu');
-                menu.classList.toggle('active');
-            }   
-        </script>
     </body>
-
 </html>

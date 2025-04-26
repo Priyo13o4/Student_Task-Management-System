@@ -13,14 +13,32 @@ class CourseForm(forms.ModelForm):
             'style': 'width: 100%;'
         }),
         required=False,
-        label="Assign Faculty"
+        label="Faculty"
+    )
+
+    level = forms.ChoiceField(
+        choices=[("UG", "Undergraduate(UG)"), ("PG", "Postgraduate(PG)")],
+        widget=forms.Select(attrs={
+            'class': 'form-control'
+        }),
+        required=True,
+        label="Level *"
     )
 
     class Meta:
         model = Course
         fields = ['name', 'code', 'level', 'faculty']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'code': forms.TextInput(attrs={'class': 'form-control'}),
-            'level': forms.Select(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter course name (ex : Transform Mathematics)'
+            }),
+            'code': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter course code (ex MAT200)'
+            }),
+        }
+        labels = {
+            'name': 'Course Name *',
+            'code': 'Course Code *',
         }
