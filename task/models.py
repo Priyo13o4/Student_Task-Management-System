@@ -26,7 +26,9 @@ class Task(models.Model):
     )
     priority = models.CharField(
         max_length=10,
-        choices=[('Low', 'Low'), ('Medium', 'Medium'), ('High', 'High')]
+        choices=[('Low', 'Low'), ('Medium', 'Medium'), ('High', 'High')],
+        null=True,
+        blank=True
     )
 
     def __str__(self):

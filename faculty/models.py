@@ -14,8 +14,8 @@ class Faculty(models.Model):
     department = models.CharField(max_length=100, blank=True)
     designation = models.CharField(max_length=100, blank=True)
     email = models.EmailField(max_length=100, blank = True)
-    phone_no = models.CharField(max_length = 15 ,null = True)
-    courses = models.ManyToManyField(Course)
+    phone = models.CharField(max_length = 15, blank = True)
+    courses = models.ManyToManyField(Course, related_name='faculty_members')
 
     def __str__(self):
         return self.user.username
