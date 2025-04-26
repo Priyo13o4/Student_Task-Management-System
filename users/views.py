@@ -68,38 +68,24 @@ def admin_dashboard(request):
         if user_form.is_valid():
             created_user = user_form.save()
             messages.success(request, f"User '{created_user.username}' created successfully.")
-            request.session['new_user_id'] = created_user.id
             return redirect('admin_dashboard')
-        
-    if request.method == "POST" and 'create_student' in request.POST:
-        student_form = StudentForm(request.POST)
-        if student_form.is_valid():
-                student = student_form.save()
-                student.save()
-                messages.success(request, f"Student '{student.user.username}' created successfully.")
-                return redirect('admin_dashboard')
 
     if request.method == "POST" and 'create_faculty' in request.POST:
         faculty_form = FacultyForm(request.POST)
         if faculty_form.is_valid():
-            faculty = faculty_form.save(commit=False)
-            faculty.user_id = request.session.pop('new_user_id', None)
-            # Get the user's email
-            user = CustomUser.objects.get(id=faculty.user_id)
-            faculty.email = user.email
-            faculty.save()
-            messages.success(request, f"Faculty '{faculty.user.username}' created successfully.")
+            faculty = faculty_form.save()
+            messages.success(request, f"Faculty profile created successfully for '{faculty.user.username}'.")
             return redirect('admin_dashboard')
-    
+
+           
     task_form, task_created = handle_task_creation(request)
     if task_created:
         return redirect('admin_dashboard')
 
     return render(request, 'users/admin_dashboard.html', {
-        **summary ,
+        **summary,
         'user_form': user_form,
-        'student_form': StudentForm(),
-        'faculty_form' : FacultyForm(),
+        'faculty_form': FacultyForm(),
         'task_form': task_form
     })
 
@@ -154,9 +140,22 @@ def student_list(request):
             models.Q(user__username__icontains=q) |
             models.Q(register_no__icontains=q)
         )
+    
+    # Handle student creation
+    if request.method == "POST" and 'create_student' in request.POST:
+        student_form = StudentForm(request.POST)
+        if student_form.is_valid():
+            student = student_form.save()
+            messages.success(request, f"Student '{student.user.username}' created successfully.")
+            return redirect('student_list')
+    else:
+        student_form = StudentForm()
+
     return render(request, 'students/student_list.html', {
         'students': students,
         'q': q,
+        'student_form': student_form,
+        'total_students': students.count(),
     })
 
 @login_required

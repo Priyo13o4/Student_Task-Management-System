@@ -5,26 +5,56 @@
     <meta charset="UTF-8">
     <title>Manage Faculty</title>
     <link rel="stylesheet" href="{% static 'css/admin_styles.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{% static 'js/admin_scripts.js' %}"></script>
+    <script src="{% static 'js/faculty_manage.js' %}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Search and select a course...",
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
 </head>
 <body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> <!-- This will print when user creation is successful-->
+        {% endfor %}
+    </ul>
+    {% endif %}
 
 
     <div class="manage-faculty-container">
         <h1>Manage {{ faculty.user.first_name }} {{ faculty.user.last_name }}</h1>
-        <div class="faculty-info">
-            <p><strong>Name:</strong> {{ faculty.user.first_name }} {{ faculty.user.last_name }}</p>
-            <p><strong>Username:</strong> {{ faculty.user.username }}</p>
-            <p><strong>Faculty ID:</strong> {{ faculty.faculty_id }}</p>
-            <p><strong>Department:</strong> {{ faculty.department }}</p>
-            <p><strong>Designation:</strong> {{ faculty.designation }}</p>
-            <p><strong>Email:</strong> {{ faculty.email }}</p>
-            <p><strong>Phone Number:</strong> {{ faculty.phone_no }}</p>
-        </div>
+        
+        <form method="POST" id="updateForm" onchange="enableUpdateButton()">
+            {% csrf_token %}
+            <div class="faculty-info">
+                <p><strong>First Name:</strong> <input type="text" name="first_name" value="{{ faculty.user.first_name }}" onchange="enableUpdateButton()"></p>
+                <p><strong>Last Name:</strong> <input type="text" name="last_name" value="{{ faculty.user.last_name }}" onchange="enableUpdateButton()"></p>
+                <p><strong>Username:</strong> {{ faculty.user.username }}</p>
+                <p><strong>Faculty ID:</strong> {{ faculty.faculty_id }}</p>
+                <p><strong>Department:</strong> <input type="text" name="department" value="{{ faculty.department }}" onchange="enableUpdateButton()"></p>
+                <p><strong>Designation:</strong> <input type="text" name="designation" value="{{ faculty.designation }}" onchange="enableUpdateButton()"></p>
+                <p><strong>Email:</strong> <input type="email" name="email" value="{{ faculty.email }}" onchange="enableUpdateButton()"></p>
+                <p><strong>Phone Number:</strong> <input type="text" name="phone" value="{{ faculty.phone }}" onchange="enableUpdateButton()"></p>
+            </div>
+            <button type="submit" name="update_details" id="updateButton" disabled>Update Details</button>
+        </form>
 
         <h2>Assigned Courses</h2>
-        <ul>
+        <ul class="course-list">
             {% for course in courses %}
-                <li>{{ course.name }} ({{ course.code }})</li>
+                <li data-course-id="{{ course.id }}">
+                    {{ course.name }} ({{ course.code }})
+                    <button type="button" class="remove-course" data-faculty-id="{{ faculty.id }}" data-course-id="{{ course.id }}" title="Remove course">×</button>
+                </li>
             {% empty %}
                 <li>No courses assigned yet.</li>
             {% endfor %}
@@ -34,8 +64,15 @@
         <form method="POST">
             {% csrf_token %}
             {{ course_form.non_field_errors }}
-            {{ course_form.as_p }}
+            <div class="course-assignment">
+                {{ course_form.course }}
+            </div>
             <button type="submit" name="submit_course">Assign Course</button>
+        </form>
+
+        <form method="POST" action="{% url 'delete_faculty' faculty.id %}">
+            {% csrf_token %}
+            <button type="submit" class="delete-button">Delete Faculty</button>
         </form>
 
         <div class="back-link-container">
