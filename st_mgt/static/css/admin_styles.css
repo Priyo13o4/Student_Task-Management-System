@@ -26,7 +26,7 @@ a {
 
 /* Header Section */
 #header {
-  background-color: #34495e;
+  background-color: #d26014a2;
   color: white;
   padding: 15px 0;
   text-align: center;
@@ -43,6 +43,108 @@ a {
 }
 
 /* Profile Navigation */
+#navbar {
+  background-color: #19ba0a;
+  color: white;
+  padding: 15px 0;
+  text-align: center;
+  border-radius: 8px;
+}
+/* Navbar Styles */
+.navbar {
+    background-color: #1abc9c;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(42, 174, 148, 0.84);
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.navbar-brand {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.navbar-menu {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.navbar-menu a {
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+.navbar-menu a:hover {
+    background-color: #16a085;
+}
+
+.navbar-menu a.active {
+    background-color: #16a085;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.logout-btn {
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Responsive navbar toggle */
+.navbar-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.navbar-toggle span {
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+    .navbar-toggle {
+        display: flex;
+    }
+    
+    .navbar-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: #1abc9c;
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .navbar-menu.active {
+        display: flex;
+    }
+}
+
 #profile_menu {
   display: flex;
   justify-content: flex-end;
@@ -56,7 +158,7 @@ a {
   border-radius: 5px;
   font-size: 14px;
   transition: background-color 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(198, 12, 12, 0.1);
 }
 
 #profile_menu .topmenu a:hover {

@@ -18,9 +18,10 @@
             </div>
             <div class="navbar-menu">
                 <a href="{% url 'admin_dashboard' %}">Dashboard</a>
-                <a href="{% url 'student_list' %}"class="active">Students</a>
+                <a href="{% url 'student_list' %}">Students</a>
                 <a href="{% url 'faculty_list' %}">Faculty</a>
-                <a href="{% url 'course_list' %}">Courses</a>
+                <a href="{% url 'course_list' %}" class="active">Courses</a>
+                <a href="{% url 'task_list' %}">Tasks</a>
             </div>
             <div class="user-info">
                 <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
