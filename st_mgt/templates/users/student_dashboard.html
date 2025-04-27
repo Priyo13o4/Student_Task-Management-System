@@ -10,6 +10,28 @@
     {% csrf_token %}
 </head>
 <body>
+    <button id="darkModeToggle">Light Mode</button>
+    <script>
+        // Dark mode default
+        function setDarkMode(on) {
+            if(on) {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeToggle').innerText = 'Light Mode';
+            } else {
+                document.body.classList.remove('dark-mode');
+                document.getElementById('darkModeToggle').innerText = 'Dark Mode';
+            }
+        }
+        // Check localStorage or default to dark
+        let dark = localStorage.getItem('darkMode');
+        if(dark === null) dark = 'true';
+        setDarkMode(dark === 'true');
+        document.getElementById('darkModeToggle').onclick = function() {
+            const isDark = !document.body.classList.contains('dark-mode');
+            setDarkMode(isDark);
+            localStorage.setItem('darkMode', isDark);
+        };
+    </script>
     <!-- Hero Section -->
     <section class="hero-section">
         <a href="{% url 'logout' %}" class="logout-btn">
@@ -29,6 +51,10 @@
                 <div class="stat-card">
                     <div class="stat-number">{{ pending_tasks|length }}</div>
                     <div class="stat-label">Pending Tasks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">In Progress Tasks</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number">{{ completed_tasks|length }}</div>
@@ -129,7 +155,7 @@
                                     <h6 class="mb-0">{{ task.title }}</h6>
                                     <small class="text-muted">Due: {{ task.due_date|date:"M d, Y" }}</small>
                                 </div>
-                                <p class="task-description">{{ task.description }}</p>
+                                <p class="task-description text-muted">{{ task.description }}</p>
                                 <div class="task-footer">
                                     <div class="task-meta">
                                         <span class="badge bg-secondary">{{ task.priority }}</span>

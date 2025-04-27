@@ -47,7 +47,7 @@
     </ul>
     {% endif %}
 
-    <h1>Student List</h1>   
+    <h1>Search Student</h1>   
     <div class="search-container">
         <form method="GET" action="" class="search-form">
             <input type="text" name="q" placeholder="Search students by name, username, or roll number..." value="{{ q }}" class="search-input">
@@ -90,7 +90,7 @@
 
     <!-- Student Creation Form -->
     <div class="creation-form">
-        <h2>Create New Student</h2>
+        <h2>Update Details of New Student</h2>
         <form method="POST">
             {% csrf_token %}
             {{ student_form.as_p }}
