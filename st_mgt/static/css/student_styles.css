@@ -407,21 +407,24 @@ body.dark-mode .btn-success {
     position: absolute;
     top: 1rem;
     right: 1rem;
-    background-color: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: 1px solid white;
+    background-color: #e74a3b !important;
+    color: #fff !important;
+    border: 1px solid #e74a3b !important;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     transition: all 0.3s ease;
     text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .logout-btn:hover {
-    background-color: white;
-    color: var(--primary-color);
+    background-color: #fff !important;
+    color: #e74a3b !important;
+    border: 1px solid #e74a3b !important;
     transform: translateY(-2px);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-  }
+}
 
 #profile_menu{
   background-color:  #7600bc;
@@ -570,5 +573,28 @@ body.dark-mode .task-item:hover,
 body.dark-mode .course-item:hover,
 body.dark-mode .grade-item:hover {
     background: rgba(255,255,255,0.10) !important;
+}
+
+.hero-section .logout-btn,
+.hero-section .logout-btn:visited,
+.hero-section .logout-btn:active {
+    background: rgba(231, 74, 59, 0.7) !important; /* semi-transparent red */
+    color: #fff !important;
+    border: 1px solid #e74a3b !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.hero-section .logout-btn:hover {
+    background: rgba(255,255,255,0.7) !important;
+    color: #e74a3b !important;
+    border: 1px solid #e74a3b !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.hero-section .logout-btn i {
+    color: inherit !important;
 }
   
