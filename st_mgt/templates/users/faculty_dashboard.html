@@ -12,6 +12,28 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 <body>
+    <button id="darkModeToggle">Light Mode</button>
+    <script>
+        // Dark mode default
+        function setDarkMode(on) {
+            if(on) {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeToggle').innerText = 'Light Mode';
+            } else {
+                document.body.classList.remove('dark-mode');
+                document.getElementById('darkModeToggle').innerText = 'Dark Mode';
+            }
+        }
+        // Check localStorage or default to dark
+        let dark = localStorage.getItem('darkMode');
+        if(dark === null) dark = 'true';
+        setDarkMode(dark === 'true');
+        document.getElementById('darkModeToggle').onclick = function() {
+            const isDark = !document.body.classList.contains('dark-mode');
+            setDarkMode(isDark);
+            localStorage.setItem('darkMode', isDark);
+        };
+    </script>
     <!-- Hero Section -->
     <section class="hero-section">
         <a href="{% url 'logout' %}" class="logout-btn">
