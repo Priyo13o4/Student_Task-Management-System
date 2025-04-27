@@ -1,8 +1,9 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.core.exceptions import PermissionDenied
 from django.db import models
+from django.http import JsonResponse
 from student.models import Student,Course,Grade
 from faculty.models import Faculty
 from task.models import Task
@@ -77,16 +78,11 @@ def admin_dashboard(request):
             messages.success(request, f"Faculty profile created successfully for '{faculty.user.username}'.")
             return redirect('admin_dashboard')
 
-           
-    task_form, task_created = handle_task_creation(request)
-    if task_created:
-        return redirect('admin_dashboard')
+        
 
     return render(request, 'users/admin_dashboard.html', {
         **summary,
         'user_form': user_form,
-        'faculty_form': FacultyForm(),
-        'task_form': task_form
     })
 
 @login_required
@@ -99,11 +95,12 @@ def faculty_dashboard(request):
     context = get_faculty_context(faculty)
     
     # Handle task creation using the same function as admin dashboard
-    task_form, task_created = handle_task_creation(request)
+    task_form, task_created, students = handle_task_creation(request)
     if task_created:
         return redirect('faculty_dashboard')
     
     context['task_form'] = task_form
+    context['students'] = students
     return render(request, "users/faculty_dashboard.html", context)
 
 @login_required
@@ -130,33 +127,6 @@ def student_dashboard(request):
     context['completed_tasks'] = tasks.filter(status="Completed")
     return render(request, "users/student_dashboard.html", context)
 
-@login_required
-@user_passes_test(is_faculty_or_admin)
-def student_list(request):
-    q = request.GET.get('q', '').strip()
-    students = Student.objects.all()
-    if q:
-        students = students.filter(
-            models.Q(user__username__icontains=q) |
-            models.Q(register_no__icontains=q)
-        )
-    
-    # Handle student creation
-    if request.method == "POST" and 'create_student' in request.POST:
-        student_form = StudentForm(request.POST)
-        if student_form.is_valid():
-            student = student_form.save()
-            messages.success(request, f"Student '{student.user.username}' created successfully.")
-            return redirect('student_list')
-    else:
-        student_form = StudentForm()
-
-    return render(request, 'students/student_list.html', {
-        'students': students,
-        'q': q,
-        'student_form': student_form,
-        'total_students': students.count(),
-    })
 
 @login_required
 @user_passes_test(is_admin)
@@ -173,17 +143,6 @@ def faculty_list(request):
         'q': q,
     })
 
-@login_required
-@user_passes_test(is_faculty_or_admin)
-def task_list(request):
-    q = request.GET.get('q', '').strip()
-    tasks = Task.objects.all()
-    if q:
-        tasks = tasks.filter(
-            models.Q(title__icontains=q) |
-            models.Q(description__icontains=q)
-        )
-    return render(request, 'tasks/task_list.html', {'tasks': tasks, 'q': q})
 
 @login_required
 def student_grades(request):
@@ -193,3 +152,51 @@ def student_grades(request):
         'grades': grades,
         'gpa': student.gpa
     })
+
+@login_required
+@user_passes_test(is_admin)
+def delete_course(request, course_id):
+    if request.method == 'POST':
+        course = get_object_or_404(Course, id=course_id)
+        try:
+            course.delete()
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+@login_required
+@user_passes_test(is_admin)
+def delete_student(request, student_id):
+    if request.method == 'POST':
+        student = get_object_or_404(Student, id=student_id)
+        try:
+            student.user.delete()  # This will also delete the student due to CASCADE
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+@login_required
+@user_passes_test(is_admin)
+def delete_faculty(request, faculty_id):
+    if request.method == 'POST':
+        faculty = get_object_or_404(Faculty, id=faculty_id)
+        try:
+            faculty.user.delete()  # This will also delete the faculty due to CASCADE
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+@login_required
+@user_passes_test(is_faculty_or_admin)
+def delete_task(request, task_id):
+    if request.method == 'POST':
+        task = get_object_or_404(Task, id=task_id)
+        try:
+            task.delete()
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})

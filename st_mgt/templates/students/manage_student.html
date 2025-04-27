@@ -77,10 +77,9 @@
             <button type="submit" name="submit_grade">Save Grade</button>
         </form>
 
-        <form method="POST" action="{% url 'delete_student' student.id %}">
-            {% csrf_token %}
-            <button type="submit" class="delete-button">Delete Student</button>
-        </form>
+        <div class="delete-container">
+            <button type="button" class="delete-button" data-student-id="{{ student.id }}">Delete</button>
+        </div>
 
         <div class="back-link-container">
             <a href="{% url 'admin_dashboard' %}" class="back-link">← Back to admin_dashboard</a>
@@ -90,5 +89,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{% static 'js/student_manage.js' %}"></script>
+    <script src="{% static 'js/delete_manage.js' %}"></script>
 </body>
 </html>

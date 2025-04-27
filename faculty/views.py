@@ -100,7 +100,7 @@ def manage_faculty(request, faculty_id):
             messages.success(request, f"Details for {faculty.user.username} have been updated.")
             return redirect('manage_faculty', faculty_id=faculty_id)
 
-    return render(request, 'users/manage_faculty.html', {
+    return render(request, 'faculty/manage_faculty.html', {
         'faculty': faculty,
         'courses': courses,
         'course_form': course_form,
@@ -109,13 +109,30 @@ def manage_faculty(request, faculty_id):
 @login_required
 @user_passes_test(is_admin)
 def delete_faculty(request, faculty_id):
-    faculty = get_object_or_404(Faculty, pk=faculty_id)
     if request.method == 'POST':
-        faculty_name = faculty.user.username
-        faculty.delete()
-        messages.success(request, f"Faculty '{faculty_name}' has been deleted.")
-        return redirect('faculty_list')
-    return render(request, 'faculty/confirm_delete.html', {'faculty': faculty})
+        faculty = get_object_or_404(Faculty, id=faculty_id)
+        try:
+            # Store the user instance and delete it first
+            user = faculty.user
+            if user and user.role == 'faculty':
+                user.delete()
+            else:
+                # If user doesn't exist or isn't a faculty member, just delete the faculty profile
+                faculty.delete()
+                
+            return JsonResponse({
+                'success': True,
+                'message': 'Faculty member deleted successfully'
+            })
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            })
+    return JsonResponse({
+        'success': False,
+        'error': 'Invalid request method'
+    })
 
 @login_required
 @user_passes_test(is_admin)

@@ -38,14 +38,24 @@ class FacultyForm(forms.ModelForm):
             'onchange': 'updateEmail();'
         }),
         required=True,
-        label="Select Faculty User"
+        label="Faculty User *"
+    )
+    
+    courses = forms.ModelMultipleChoiceField(
+        queryset=Course.objects.all(),
+        widget=forms.SelectMultiple(attrs={
+            'class': 'select2',
+            'data-placeholder': 'Search and select courses...',
+            'style': 'width: 100%;'
+        }),
+        required=False,
+        label="Courses"
     )
     
     class Meta:
         model = Faculty
         fields = ['user', 'faculty_id', 'department', 'designation', 'email', 'phone', 'courses']
         widgets = {
-            'courses': forms.CheckboxSelectMultiple(),
             'email': forms.EmailInput(attrs={
                 'readonly': 'readonly',
                 'class': 'form-control',
@@ -54,8 +64,28 @@ class FacultyForm(forms.ModelForm):
             'faculty_id': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'min': 100,
-                'max': 999
+                'max': 999,
+                'placeholder': 'Enter 3-digit faculty ID'
             }),
+            'department': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter department name'
+            }),
+            'designation': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter designation'
+            }),
+            'phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter phone number'
+            })
+        }
+        labels = {
+            'faculty_id': 'Faculty ID *',
+            'department': 'Department',
+            'designation': 'Designation',
+            'email': 'Email *',
+            'phone': 'Phone'
         }
 
     def __init__(self, *args, **kwargs):
@@ -92,5 +122,7 @@ class FacultyForm(forms.ModelForm):
             instance.email = instance.user.email
         if commit:
             instance.save()
+            # Save the many-to-many relationship
+            self.save_m2m()
         return instance
     
