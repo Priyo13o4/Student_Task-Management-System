@@ -35,7 +35,7 @@ class CourseForm(forms.ModelForm):
             }),
             'code': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Enter course code (ex MAT200)'
+                'placeholder': 'Enter course code (ex MAT2001)'
             }),
         }
         labels = {
