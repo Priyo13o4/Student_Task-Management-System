@@ -7,10 +7,17 @@ from .models import Student, calculate_gpa, Grade, Course
 from .forms import GradeForm, StudentForm
 from users.utils import is_faculty_or_admin, is_admin
 from task.models import Task
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from courses.forms import CourseForm
+import csv
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.platypus import Table, TableStyle
+from django.utils.text import slugify
 
 
 
@@ -181,3 +188,175 @@ def remove_course(request, student_id, course_id):
         return JsonResponse({'success': False, 'error': str(e)})
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
+    
+#Export stuff 
+
+@login_required
+def export_grades_csv(request, student_id=None):
+    if student_id:
+        # For student view
+        student = get_object_or_404(Student, pk=student_id)
+        if not (request.user.is_staff or request.user == student.user):
+            return HttpResponse('Unauthorized', status=401)
+        grades = Grade.objects.filter(student=student)
+    else:
+        # For admin view
+        if not request.user.is_staff:
+            return HttpResponse('Unauthorized', status=401)
+        grades = Grade.objects.all()
+
+    response = HttpResponse(content_type='text/csv')
+    filename = f'grades_{student.register_no if student_id else "all"}.csv'
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    writer = csv.writer(response)
+    
+    if student_id:
+        # For individual student view
+        writer.writerow(['Student Name:', f'{student.user.first_name} {student.user.last_name}'])
+        writer.writerow(['Register No:', student.register_no])
+        writer.writerow([])  # Empty row for spacing
+        writer.writerow(['Course Code', 'Course Name', 'Grade'])
+        writer.writerow([])  # Empty row for spacing
+        
+        for grade in grades:
+            writer.writerow([
+                grade.course.code,
+                grade.course.name,
+                grade.grade
+            ])
+        
+        writer.writerow([])  # Empty row for spacing
+        writer.writerow(['Total GPA:', student.gpa])
+    else:
+        # For admin view (all students)
+        current_student = None
+        for grade in grades:
+            student = grade.student
+            if current_student != student:
+                if current_student is not None:
+                    writer.writerow(['Total GPA:', current_student.gpa])
+                    writer.writerow([])  # Empty row for spacing between students
+                writer.writerow(['Register No:', student.register_no])
+                writer.writerow(['Course Code', 'Course Name', 'Grade'])
+                writer.writerow([])  # Empty row for spacing
+                current_student = student
+            
+            writer.writerow([
+                grade.course.code,
+                grade.course.name,
+                grade.grade
+            ])
+        
+        if current_student is not None:
+            writer.writerow([])  # Empty row for spacing
+            writer.writerow(['Total GPA:', current_student.gpa])
+
+    return response
+
+@login_required
+def export_grades_pdf(request, student_id=None):
+    if student_id:
+        # For student view
+        student = get_object_or_404(Student, pk=student_id)
+        if not (request.user.is_staff or request.user == student.user):
+            return HttpResponse('Unauthorized', status=401)
+        grades = Grade.objects.filter(student=student)
+    else:
+        # For admin view
+        if not request.user.is_staff:
+            return HttpResponse('Unauthorized', status=401)
+        grades = Grade.objects.all()
+
+    response = HttpResponse(content_type='application/pdf')
+    filename = f'grades_{student.register_no if student_id else "all"}.pdf'
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    buffer = BytesIO()
+    p = canvas.Canvas(buffer, pagesize=letter)
+    width, height = letter
+
+    # Title
+    p.setFont("Helvetica-Bold", 16)
+    title = f"Grades Report - {student.register_no if student_id else 'All Students'}"
+    p.drawString(50, height - 50, title)
+
+    y_position = height - 100  # Starting position for content
+
+    if student_id:
+        # For individual student view
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(50, y_position, f"Student Name: {student.user.first_name} {student.user.last_name}")
+        y_position -= 20
+        p.drawString(50, y_position, f"Register No: {student.register_no}")
+        y_position -= 30
+
+        # Table data
+        data = [['Course Code', 'Course Name', 'Grade']]
+        for grade in grades:
+            data.append([
+                grade.course.code,
+                grade.course.name,
+                grade.grade
+            ])
+
+        # Add GPA at the bottom
+        data.append(['', '', ''])
+        data.append(['Total GPA:', '', str(student.gpa)])
+
+    else:
+        # For admin view (all students)
+        current_student = None
+        data = []
+        
+        for grade in grades:
+            student = grade.student
+            if current_student != student:
+                if current_student is not None:
+                    data.append(['', '', ''])
+                    data.append(['Total GPA:', '', str(current_student.gpa)])
+                    data.append(['', '', ''])
+                    data.append(['', '', ''])
+                
+                data.append(['Register No:', student.register_no, ''])
+                data.append(['Course Code', 'Course Name', 'Grade'])
+                current_student = student
+            
+            data.append([
+                grade.course.code,
+                grade.course.name,
+                grade.grade
+            ])
+        
+        if current_student is not None:
+            data.append(['', '', ''])
+            data.append(['Total GPA:', '', str(current_student.gpa)])
+
+    table = Table(data)
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 14),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+        ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 1), (-1, -1), 12),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ]))
+
+    # Draw table
+    table.wrapOn(p, width - 100, height - 100)
+    table.drawOn(p, 50, y_position - 300)
+
+    p.showPage()
+    p.save()
+
+    pdf = buffer.getvalue()
+    buffer.close()
+    response.write(pdf)
+
+    return response

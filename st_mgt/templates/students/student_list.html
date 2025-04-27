@@ -8,6 +8,26 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <style>
+        .export-buttons {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+        }
+        .export-button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .export-button:hover {
+            background-color: #45a049;
+        }
+    </style>
     <script>
         $(document).ready(function() {
             $('.select2').select2({
@@ -60,6 +80,12 @@
 
     <div class="student-list-container">
         <h2>Students ({{ total_students }} total)</h2>
+        {% if user.is_staff %}
+        <div class="export-buttons">
+            <a href="{% url 'export_grades_csv' %}" class="export-button">Export All Grades as CSV</a>
+            <a href="{% url 'export_grades_pdf' %}" class="export-button">Export All Grades as PDF</a>
+        </div>
+        {% endif %}
         <table>
             <tr>
                 <th>Username</th>

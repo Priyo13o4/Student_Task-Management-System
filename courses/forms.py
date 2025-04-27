@@ -42,3 +42,15 @@ class CourseForm(forms.ModelForm):
             'name': 'Course Name *',
             'code': 'Course Code *',
         }
+
+    def clean_code(self):
+        code = self.cleaned_data.get('code')
+        if self.instance and self.instance.pk:
+            # If we're updating an existing course, exclude it from the check
+            if Course.objects.filter(code=code).exclude(pk=self.instance.pk).exists():
+                raise forms.ValidationError("Course code already exists")
+        else:
+            # If we're creating a new course
+            if Course.objects.filter(code=code).exists():
+                raise forms.ValidationError("Course code already exists")
+        return code

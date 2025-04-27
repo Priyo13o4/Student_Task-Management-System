@@ -140,9 +140,16 @@
             <td>{{ task.title }}</td>
             <td>{{ task.description }}</td>
             <td>
-                {% for student in task.assigned_to.all %}
-                    {{ student.first_name }} {{ student.last_name }}{% if not forloop.last %}, {% endif %}
-                {% endfor %}
+                {% with students=task.assigned_to.all %}
+                    {% if students %}
+                        {{ students.0.first_name }} {{ students.0.last_name }}
+                        {% if students|length > 1 %}
+                            + {{ students|length|add:"-1" }} more
+                        {% endif %}
+                    {% else %}
+                        No students assigned
+                    {% endif %}
+                {% endwith %}
             </td>
             <td>{{ task.due_date }}</td>
             <td>

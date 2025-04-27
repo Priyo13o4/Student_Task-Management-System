@@ -499,4 +499,33 @@ body.dark-mode .btn-outline-success {
 
 .hero-section .logout-btn i {
     color: inherit !important;
+}
+
+.progress-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.status-badge.pending {
+    background-color: #ffd700;
+    color: #000;
+}
+
+.status-badge.in-progress {
+    background-color: #4169e1;
+    color: white;
+}
+
+.status-badge.completed {
+    background-color: #32cd32;
+    color: white;
 } 

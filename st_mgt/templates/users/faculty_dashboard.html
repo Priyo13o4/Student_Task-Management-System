@@ -171,9 +171,23 @@
                                     <small class="text-muted">Due: {{ task.due_date|date:"M d, Y" }}</small>
                                 </div>
                                 <div>
-                                    <span class="badge {% if task.status == 'completed' %}bg-success{% else %}bg-warning{% endif %} me-2">
-                                        {{ task.status }}
-                                    </span>
+                                    {% with progress=task.get_progress_counts %}
+                                        {% if task.get_overall_status == 'Completed' %}
+                                            <span class="status-badge completed">Completed</span>
+                                        {% else %}
+                                            <div class="progress-container">
+                                                <span class="status-badge pending">
+                                                    Pending ({{ progress.Pending|default:0 }})
+                                                </span>
+                                                <span class="status-badge in-progress">
+                                                    In Progress ({{ progress.In_Progress|default:0 }})
+                                                </span>
+                                                <span class="status-badge completed">
+                                                    Completed ({{ progress.Completed|default:0 }})
+                                                </span>
+                                            </div>
+                                        {% endif %}
+                                    {% endwith %}
                                     <a href="{% url 'manage_task' task.id %}" class="btn btn-primary btn-sm">
                                         <i class="bi bi-gear me-1"></i>Manage
                                     </a>

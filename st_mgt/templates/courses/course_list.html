@@ -47,18 +47,22 @@
             <div class="form-group">
                 {{ course_form.name.label_tag }}
                 {{ course_form.name }}
+                {{ course_form.name.errors }}
             </div>
             <div class="form-group">
                 {{ course_form.code.label_tag }}
                 {{ course_form.code }}
+                {{ course_form.code.errors }}
             </div>
             <div class="form-group">
                 {{ course_form.level.label_tag }}
                 {{ course_form.level }}
+                {{ course_form.level.errors }}
             </div>
             <div class="form-group">
                 {{ course_form.faculty.label_tag }}
                 {{ course_form.faculty }}
+                {{ course_form.faculty.errors }}
             </div>
             <button type="submit" name="create_course">Create Course</button>
         </form>
@@ -84,10 +88,20 @@
         </tr>
         {% for course in courses %}
         <tr>
-            <td>{{ course.name }}</td>
-            <td>{{ course.code }}</td>
-            <td>{{ course.level }}</td>
             <td>
+                <input type="text" name="name" value="{{ course.name }}" class="editable-field" data-course-id="{{ course.id }}" data-field="name">
+            </td>
+            <td>
+                <input type="text" name="code" value="{{ course.code }}" class="editable-field" data-course-id="{{ course.id }}" data-field="code">
+            </td>
+            <td>
+                <select name="level" class="editable-field" data-course-id="{{ course.id }}" data-field="level">
+                    <option value="UG" {% if course.level == 'UG' %}selected{% endif %}>Undergraduate(UG)</option>
+                    <option value="PG" {% if course.level == 'PG' %}selected{% endif %}>Postgraduate(PG)</option>
+                </select>
+            </td>
+            <td>
+                <button type="button" class="update-button" data-course-id="{{ course.id }}">Update</button>
                 <button type="button" class="delete-button" data-course-id="{{ course.id }}">Delete</button>
             </td>
         </tr>
@@ -95,6 +109,12 @@
         <tr><td colspan="4">No courses found.</td></tr>  
         {% endfor %}
     </table>
+
+    {% if not show_all and not q and has_more %}
+    <div class="view-more-container">
+        <a href="?show_all=1" class="view-more-button">Show All Courses</a>
+    </div>
+    {% endif %}
 
     <div class="back-link-container">
         <a href="{% url 'admin_dashboard' %}" class="back-link">← Back to admin_dashboard</a>
@@ -109,6 +129,36 @@
                 placeholder: "Search and select faculty...",
                 allowClear: true,
                 width: '100%'
+            });
+
+            // Handle update button clicks
+            $('.update-button').click(function() {
+                const courseId = $(this).data('course-id');
+                const row = $(this).closest('tr');
+                const data = {
+                    name: row.find('[data-field="name"]').val(),
+                    code: row.find('[data-field="code"]').val(),
+                    level: row.find('[data-field="level"]').val(),
+                };
+
+                $.ajax({
+                    url: `/courses/${courseId}/update/`,
+                    type: 'POST',
+                    data: data,
+                    headers: {
+                        'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            alert(response.error || 'Error updating course');
+                        }
+                    },
+                    error: function() {
+                        alert('Error updating course');
+                    }
+                });
             });
         });
     </script>
