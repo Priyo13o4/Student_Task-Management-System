@@ -17,6 +17,8 @@ from .utils import is_admin, is_faculty, is_student, is_faculty_or_admin,get_adm
 from task.views import handle_task_creation
 from users.models import CustomUser
 from task.forms import TaskForm
+from student.forms import GradeForm
+from student.models import calculate_gpa
 
 
 
@@ -199,4 +201,54 @@ def delete_task(request, task_id):
             return JsonResponse({'success': True})
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+@login_required
+@user_passes_test(is_faculty)
+def faculty_manage_grades(request, course_id):
+    if request.user.role != "faculty":
+        raise PermissionDenied
+    
+    faculty = Faculty.objects.get(user=request.user)
+    course = get_object_or_404(Course, id=course_id)
+    
+    # Verify that the faculty is assigned to this course
+    if course not in faculty.courses.all():
+        raise PermissionDenied
+    
+    # Get pending grades for this course
+    pending_grades = Grade.objects.filter(
+        course=course,
+        grade__isnull=True
+    ).select_related('student', 'student__user')
+    
+    return render(request, "users/faculty_managegradeslist.html", {
+        'course': course,
+        'pending_grades': pending_grades
+    })
+
+@login_required
+@user_passes_test(is_faculty)
+def assign_grade(request, grade_id):
+    grade = get_object_or_404(Grade, id=grade_id)
+    faculty = Faculty.objects.get(user=request.user)
+    
+    # Verify that the faculty is assigned to this course
+    if grade.course not in faculty.courses.all():
+        raise PermissionDenied
+    
+    if request.method == 'POST':
+        grade_value = request.POST.get('grade')
+        if not grade_value:
+            return JsonResponse({'success': False, 'error': 'Grade is required'})
+            
+        grade.grade = grade_value
+        grade.save()
+        
+        # Recalculate GPA
+        grade.student.gpa = calculate_gpa(grade.student)
+        grade.student.save(update_fields=['gpa'])
+        
+        return JsonResponse({'success': True})
+    
     return JsonResponse({'success': False, 'error': 'Invalid request method'})

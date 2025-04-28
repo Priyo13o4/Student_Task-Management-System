@@ -102,11 +102,11 @@
                                 <div>
                                     <h6 class="mb-0">{{ course.name }}</h6>
                                     <small class="text-muted">{{ course.code }}</small>
-                                </div>
+                                <!-- </div>
                                 <a href="{% url 'course_list' %}" class="btn btn-primary btn-sm">
                                     <i class="bi bi-gear me-1"></i>Manage
                                 </a>
-                            </div>
+                            </div> -->
                         </li>
                     {% empty %}
                         <li class="list-group-item text-center text-muted">No courses assigned.</li>
@@ -208,16 +208,23 @@
             </div>
             <div class="card-body">
                 <ul class="list-group list-group-flush">
-                    {% for grade in pending_grades_list %}
+                    {% for course in courses_with_pending_grades %}
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h6 class="mb-0">{{ grade.student.user.get_full_name }}</h6>
-                                    <small class="text-muted">{{ grade.course.name }}</small>
+                                    <h6 class="mb-0">{{ course.name }}</h6>
+                                    <small class="text-muted">{{ course.code }}</small>
                                 </div>
-                                <a href="{% url 'assign_grade' grade.id %}" class="btn btn-primary btn-sm">
-                                    <i class="bi bi-pencil me-1"></i>Assign Grade
-                                </a>
+                                <div class="d-flex align-items-center">
+                                    <div class="progress-container me-3">
+                                        <span class="status-badge pending">
+                                            Pending ({{ course.pending_count }})
+                                        </span>
+                                    </div>
+                                    <a href="{% url 'faculty_manage_grades' course.id %}" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-gear me-1"></i>Manage
+                                    </a>
+                                </div>
                             </div>
                         </li>
                     {% empty %}

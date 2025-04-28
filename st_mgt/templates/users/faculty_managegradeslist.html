@@ -1,0 +1,236 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Grades - {{ course.name }}</title>
+    <link rel="stylesheet" href="{% static 'css/faculty_styles.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+</head>
+<body>
+    <button id="darkModeToggle">Light Mode</button>
+    <script>
+        // Dark mode default
+        function setDarkMode(on) {
+            if(on) {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeToggle').innerText = 'Light Mode';
+            } else {
+                document.body.classList.remove('dark-mode');
+                document.getElementById('darkModeToggle').innerText = 'Dark Mode';
+            }
+        }
+        // Check localStorage or default to dark
+        let dark = localStorage.getItem('darkMode');
+        if(dark === null) dark = 'true';
+        setDarkMode(dark === 'true');
+        document.getElementById('darkModeToggle').onclick = function() {
+            const isDark = !document.body.classList.contains('dark-mode');
+            setDarkMode(isDark);
+            localStorage.setItem('darkMode', isDark);
+        };
+    </script>
+
+    <!-- Header Section -->
+    <section class="hero-section">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <a href="{% url 'faculty_dashboard' %}" class="btn btn-outline-primary me-2">
+                    <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+                </a>
+                <a href="{% url 'faculty_dashboard' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-house me-1"></i>Faculty Dashboard
+                </a>
+            </div>
+            <a href="{% url 'logout' %}" class="logout-btn">
+                <i class="bi bi-box-arrow-right me-1"></i>Logout
+            </a>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-welcome">Manage Grades - {{ course.name }}</h1>
+            <p class="text-muted">{{ course.code }}</p>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-body">
+                <form id="searchForm" class="row g-3">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search by student name or ID...">
+                    </div>
+                    <div class="col-md-6">
+                        <select class="form-select" id="gradeFilter">
+                            <option value="all">All Students</option>
+                            <option value="pending">Pending Grades</option>
+                            <option value="graded">Graded Students</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container content-section">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title"><i class="bi bi-people me-2"></i>Students</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush" id="studentList">
+                    {% for student_grade in pending_grades %}
+                        <li class="list-group-item student-item" data-student-id="{{ student_grade.student.id }}" data-grade-id="{{ student_grade.id }}">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-0">{{ student_grade.student.user.get_full_name }}</h6>
+                                    <small class="text-muted">ID: {{ student_grade.student.register_no }}</small>
+                                </div>
+                                <div>
+                                    <span class="status-badge pending me-3">Grade Pending</span>
+                                    <button class="btn btn-primary btn-sm assign-grade-btn" data-bs-toggle="modal" data-bs-target="#gradeModal">
+                                        <i class="bi bi-pencil me-1"></i>Assign Grade
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-center text-muted">No pending grades for this course.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grade Assignment Modal -->
+    <div class="modal fade" id="gradeModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Assign Grade</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="studentInfo"></div>
+                    <select class="form-select mt-3" id="gradeSelect">
+                        <option value="">Select Grade</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="F">F</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveGradeBtn">Save Grade</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            let currentGradeId = null;
+            let currentStudentItem = null;
+
+            // Initialize Select2
+            $('#gradeSelect').select2({
+                dropdownParent: $('#gradeModal')
+            });
+
+            // Handle search
+            $('#searchInput').on('input', function() {
+                const searchText = $(this).val().toLowerCase();
+                filterStudents();
+            });
+
+            // Handle grade filter
+            $('#gradeFilter').on('change', function() {
+                filterStudents();
+            });
+
+            function filterStudents() {
+                const searchText = $('#searchInput').val().toLowerCase();
+                const gradeFilter = $('#gradeFilter').val();
+                
+                $('.student-item').each(function() {
+                    const studentName = $(this).find('h6').text().toLowerCase();
+                    const studentId = $(this).find('small').text().toLowerCase();
+                    const isPending = $(this).find('.status-badge').hasClass('pending');
+                    
+                    const matchesSearch = studentName.includes(searchText) || studentId.includes(searchText);
+                    const matchesFilter = gradeFilter === 'all' || 
+                                        (gradeFilter === 'pending' && isPending) ||
+                                        (gradeFilter === 'graded' && !isPending);
+                    
+                    $(this).toggle(matchesSearch && matchesFilter);
+                });
+            }
+
+            // Handle grade assignment
+            $('.assign-grade-btn').click(function() {
+                currentStudentItem = $(this).closest('.student-item');
+                currentGradeId = currentStudentItem.data('grade-id');
+                const studentName = currentStudentItem.find('h6').text();
+                const studentId = currentStudentItem.find('small').text();
+                
+                $('#studentInfo').html(`
+                    <h6>Student: ${studentName}</h6>
+                    <p class="text-muted">${studentId}</p>
+                `);
+                $('#gradeSelect').val('').trigger('change');
+            });
+
+            // Save grade
+            $('#saveGradeBtn').click(function() {
+                const grade = $('#gradeSelect').val();
+                if (!grade) {
+                    alert('Please select a grade');
+                    return;
+                }
+
+                if (!confirm('Are you sure you want to assign this grade? This action cannot be undone.')) {
+                    return;
+                }
+
+                $.ajax({
+                    url: `/users/faculty/grades/${currentGradeId}/assign/`,
+                    method: 'POST',
+                    data: {
+                        grade: grade,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Update the UI
+                            currentStudentItem.find('.status-badge')
+                                .removeClass('pending')
+                                .addClass('graded')
+                                .text('Grade: ' + grade);
+                            currentStudentItem.find('.assign-grade-btn').remove();
+                            
+                            // Close modal
+                            $('#gradeModal').modal('hide');
+                            
+                            // Show success message
+                            alert('Grade assigned successfully!');
+                        } else {
+                            alert('Error assigning grade: ' + response.error);
+                        }
+                    },
+                    error: function() {
+                        alert('Error assigning grade. Please try again.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
