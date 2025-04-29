@@ -13,27 +13,6 @@
 </head>
 <body>
     <button id="darkModeToggle">Light Mode</button>
-    <script>
-        // Dark mode default
-        function setDarkMode(on) {
-            if(on) {
-                document.body.classList.add('dark-mode');
-                document.getElementById('darkModeToggle').innerText = 'Light Mode';
-            } else {
-                document.body.classList.remove('dark-mode');
-                document.getElementById('darkModeToggle').innerText = 'Dark Mode';
-            }
-        }
-        // Check localStorage or default to dark
-        let dark = localStorage.getItem('darkMode');
-        if(dark === null) dark = 'true';
-        setDarkMode(dark === 'true');
-        document.getElementById('darkModeToggle').onclick = function() {
-            const isDark = !document.body.classList.contains('dark-mode');
-            setDarkMode(isDark);
-            localStorage.setItem('darkMode', isDark);
-        };
-    </script>
     <!-- Hero Section -->
     <section class="hero-section">
         <a href="{% url 'logout' %}" class="logout-btn">
@@ -236,26 +215,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            // Initialize Select2
-            $('#id_assigned_to').select2({
-                placeholder: "Select students...",
-                allowClear: true
-            });
-
-            // Select All button functionality
-            $('#selectAllBtn').click(function() {
-                $('#id_assigned_to option').prop('selected', true);
-                $('#id_assigned_to').trigger('change');
-            });
-
-            // Clear All button functionality
-            $('#clearAllBtn').click(function() {
-                $('#id_assigned_to option').prop('selected', false);
-                $('#id_assigned_to').trigger('change');
-            });
-        });
-    </script>
+    <script src="{% static 'js/faculty_dashboard.js' %}"></script>
 </body>
 </html>

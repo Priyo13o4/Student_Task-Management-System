@@ -1,4 +1,46 @@
 $(document).ready(function() {
+    // Dark mode functionality
+    function setDarkMode(on) {
+        if(on) {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModeToggle').innerText = 'Light Mode';
+        } else {
+            document.body.classList.remove('dark-mode');
+            document.getElementById('darkModeToggle').innerText = 'Dark Mode';
+        }
+    }
+
+    // Initialize dark mode
+    let dark = localStorage.getItem('darkMode');
+    if(dark === null) dark = 'true';
+    setDarkMode(dark === 'true');
+
+    // Dark mode toggle event listener
+    document.getElementById('darkModeToggle').onclick = function() {
+        const isDark = !document.body.classList.contains('dark-mode');
+        setDarkMode(isDark);
+        localStorage.setItem('darkMode', isDark);
+    };
+
+    // Initialize Select2
+    $('#id_assigned_to').select2({
+        placeholder: "Select students...",
+        allowClear: true,
+        width: '100%'
+    });
+
+    // Select All button functionality
+    $('#selectAllBtn').click(function() {
+        $('#id_assigned_to option').prop('selected', true);
+        $('#id_assigned_to').trigger('change');
+    });
+
+    // Clear All button functionality
+    $('#clearAllBtn').click(function() {
+        $('#id_assigned_to option').prop('selected', false);
+        $('#id_assigned_to').trigger('change');
+    });
+
     let currentGradeId = null;
     let currentStudentItem = null;
 
