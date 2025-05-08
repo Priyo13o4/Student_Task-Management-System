@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path , include
 from users.views import home_redirect
+from . import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')), 
@@ -25,4 +27,5 @@ urlpatterns = [
     path('faculty/', include('faculty.urls')),
     path('courses/', include('courses.urls')),
     path('', home_redirect),
+    path('change-password/', views.change_password, name='change_password'),
 ]
