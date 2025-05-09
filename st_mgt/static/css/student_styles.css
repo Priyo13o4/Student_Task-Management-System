@@ -427,7 +427,7 @@ body.dark-mode .btn-success {
     border: 1px solid #e74a3b !important;
     transform: translateY(-2px);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-}
+  }
 
 #profile_menu{
   background-color:  #7600bc;
@@ -1027,5 +1027,30 @@ body.dark-mode .form-check-input::after {
 
 .notifications-list::-webkit-scrollbar-thumb:hover {
     background: #224abe;
+}
+
+/* Fix placeholder text visibility in dark mode */
+::placeholder {
+    color: var(--muted-text) !important;
+    opacity: 0.6 !important;
+}
+
+body.dark-mode ::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+    opacity: 1 !important;
+}
+
+/* Make selects also visible in dark mode */
+body.dark-mode .form-select, 
+body.dark-mode .form-control {
+    color: var(--text-color) !important;
+    background-color: var(--input-bg) !important;
+}
+
+/* Fix form text colors for dark mode */
+body.dark-mode .form-control-plaintext,
+body.dark-mode .form-text,
+body.dark-mode .form-label {
+    color: var(--text-color) !important;
 }
   

@@ -164,12 +164,12 @@
                 <h5 class="card-title"><i class="bi bi-list-task me-2"></i>Tasks</h5>
             </div>
             <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    {% for task in tasks %}
-                        <li class="list-group-item task-item">
+                    <ul class="list-group list-group-flush">
+                        {% for task in tasks %}
+                            <li class="list-group-item task-item">
                             <div class="task-content">
                                 <div class="task-header">
-                                    <h6 class="mb-0">{{ task.title }}</h6>
+                                        <h6 class="mb-0">{{ task.title }}</h6>
                                     <small class="text-muted">Due: {{ task.due_date|date:"M d, Y" }}</small>
                                 </div>
                                 <p class="task-description text-muted">{{ task.description }}</p>
@@ -197,16 +197,16 @@
                                                     data-task-id="{{ task.id }}"
                                                     data-status="Completed">
                                                 Completed
-                                            </button>
+                                        </button>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </li>
-                    {% empty %}
-                        <li class="list-group-item text-center text-muted">No tasks assigned.</li>
-                    {% endfor %}
-                </ul>
+                                </div>
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item text-center text-muted">No tasks assigned.</li>
+                        {% endfor %}
+                    </ul>
             </div>
         </div>
     </div>
@@ -316,7 +316,7 @@
                                 <button type="button" class="btn btn-secondary" onclick="showSettingsMenu()">Back</button>
                                 <button type="submit" class="btn btn-primary">Change Password</button>
                             </div>
-                        </form>
+                </form>
                     </div>
                 </div>
             </div>
