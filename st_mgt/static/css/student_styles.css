@@ -404,22 +404,25 @@ body.dark-mode .btn-success {
 
 /* Logout Button Styles */
 .logout-btn {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background-color: #e74a3b !important;
+    background: rgba(231, 74, 59, 0.7) !important;
     color: #fff !important;
     border: 1px solid #e74a3b !important;
     padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+    border-radius: 12px !important;
     transition: all 0.3s ease;
     text-decoration: none;
     font-weight: 600;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
 }
 
 .logout-btn:hover {
-    background-color: #fff !important;
+    background: rgba(255,255,255,0.7) !important;
     color: #e74a3b !important;
     border: 1px solid #e74a3b !important;
     transform: translateY(-2px);
@@ -619,5 +622,410 @@ body.dark-mode .grade-item:hover {
 
 .export-button:hover {
     background-color: #45a049;
+}
+
+.hero-actions {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    z-index: 10;
+}
+
+.settings-btn {
+    background: rgba(78, 115, 223, 0.7) !important;
+    color: #fff !important;
+    border: 1px solid #4e73df !important;
+    border-radius: 12px !important;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: all 0.2s ease;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 0;
+}
+
+.settings-btn:hover {
+    background: rgba(255,255,255,0.7) !important;
+    color: #4e73df !important;
+    border: 1px solid #4e73df !important;
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.settings-btn svg {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+}
+
+.logout-btn {
+    margin: 0;
+    padding: 0.5rem 1rem;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Modal Styles */
+.modal-content {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--card-border) !important;
+    border-radius: 16px !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--divider) !important;
+    color: var(--text-color) !important;
+}
+
+.modal-body {
+    color: var(--text-color) !important;
+}
+
+.modal .form-label {
+    color: var(--text-color) !important;
+}
+
+.modal .form-control {
+    background: var(--input-bg) !important;
+    color: var(--text-color) !important;
+    border: 1px solid var(--input-border) !important;
+    border-radius: 12px !important;
+}
+
+.modal .form-control:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.15);
+}
+
+.modal .btn-close {
+    filter: var(--btn-close-filter) !important;
+}
+
+.modal .alert-danger {
+    background: rgba(231, 74, 59, 0.1) !important;
+    border: 1px solid rgba(231, 74, 59, 0.2) !important;
+    color: #e74a3b !important;
+}
+
+/* Settings Menu Styles */
+#settingsMenu .list-group-item {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--card-border) !important;
+    color: var(--text-color) !important;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 12px !important;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+#settingsMenu .list-group-item:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    transform: translateX(5px);
+}
+
+#settingsMenu .list-group-item i {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+/* Password Form Styles */
+#passwordForm .form-control {
+    background: var(--input-bg) !important;
+    border: 1px solid var(--card-border) !important;
+    color: var(--text-color) !important;
+    padding: 0.75rem 1rem;
+    border-radius: 12px !important;
+    transition: all 0.2s ease;
+}
+
+#passwordForm .form-control:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.15);
+}
+
+#passwordForm .btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px !important;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+#passwordForm .btn-primary {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+#passwordForm .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+#passwordForm .btn-secondary {
+    background: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+}
+
+#passwordForm .btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+/* Settings Section Styles */
+.settings-section {
+    margin-bottom: 1.5rem;
+}
+
+.settings-section-title {
+    color: var(--text-color);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.75rem;
+    padding-left: 0.5rem;
+    opacity: 0.8;
+}
+
+.settings-section .list-group-item {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--card-border) !important;
+    color: var(--text-color) !important;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 12px !important;
+    transition: all 0.2s ease;
+}
+
+.settings-section .list-group-item:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    transform: translateX(5px);
+}
+
+.settings-section .list-group-item i {
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+/* Form Switch Styles */
+.form-check-input {
+    width: 3em !important;
+    height: 1.5em !important;
+    margin-top: 0.125em !important;
+    background-color: var(--card-bg) !important;
+    border: 1px solid var(--card-border) !important;
+    border-radius: 2em !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+    position: relative !important;
+    background-image: none !important;
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.form-check-input:not(:checked) {
+    background-color: var(--card-bg) !important;
+}
+
+.form-check-input::after {
+    content: '';
+    position: absolute;
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 50%;
+    background-color: white;
+    top: 0.1em;
+    left: 0.1em;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.form-check-input:checked::after {
+    transform: translateX(1.5em);
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.15) !important;
+}
+
+/* Dark mode adjustments */
+body.dark-mode .form-check-input {
+    background-color: var(--card-bg) !important;
+    border-color: var(--card-border) !important;
+}
+
+body.dark-mode .form-check-input:checked {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+body.dark-mode .form-check-input::after {
+    background-color: #fff;
+}
+
+/* Compact View Styles */
+/* Remove all compact view styles */
+
+/* Responsive adjustments for compact view */
+@media (max-width: 1200px) {
+    .compact-view .content-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .compact-view .content-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Notifications Button Styles */
+.notifications-btn {
+    background: rgba(78, 115, 223, 0.7) !important;
+    color: #fff !important;
+    border: 1px solid #4e73df !important;
+    border-radius: 12px !important;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: all 0.2s ease;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 0;
+    position: relative;
+}
+
+.notifications-btn:hover {
+    background: rgba(255,255,255,0.7) !important;
+    color: #4e73df !important;
+    border: 1px solid #4e73df !important;
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.notifications-btn i {
+    font-size: 1.2rem;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #e74a3b;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--card-bg);
+}
+
+/* Notifications Modal Styles */
+.notifications-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    display: flex;
+    padding: 1rem;
+    border-bottom: 1px solid var(--divider);
+    transition: all 0.2s ease;
+    background: var(--card-bg);
+    border-radius: 12px;
+    margin-bottom: 0.5rem;
+}
+
+.notification-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.notification-item.unread {
+    background: rgba(78, 115, 223, 0.1);
+}
+
+.notification-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.notification-icon i {
+    color: white;
+    font-size: 1.2rem;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--text-color);
+}
+
+.notification-text {
+    color: var(--muted-text);
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.notification-time {
+    color: var(--muted-text);
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+/* Scrollbar Styles for Notifications */
+.notifications-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notifications-list::-webkit-scrollbar-track {
+    background: var(--card-bg);
+    border-radius: 3px;
+}
+
+.notifications-list::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+.notifications-list::-webkit-scrollbar-thumb:hover {
+    background: #224abe;
 }
   
