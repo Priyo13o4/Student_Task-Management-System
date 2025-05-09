@@ -4,11 +4,13 @@ from django.contrib import messages
 from django.http import JsonResponse
 from .models import Faculty
 from .forms import CourseAssignmentForm, FacultyForm
-from users.utils import is_admin
+from users.utils import is_admin, is_faculty_or_admin
 from users.models import CustomUser
 from django.db import models
 from django.db.models import Q
 from courses.models import Course
+from task.models import Task
+from task.forms import TaskForm
 
 def get_faculty_context(user):
     faculty = Faculty.objects.get(user=user)
@@ -151,3 +153,55 @@ def remove_course(request, faculty_id, course_id):
             'success': False,
             'error': str(e)
         })
+
+@login_required
+@user_passes_test(is_faculty_or_admin)
+def manage_faculty_tasks(request):
+    faculty = Faculty.objects.get(user=request.user)
+    courses = faculty.courses.all()
+    
+    # Get tasks created by this faculty member, ordered by due date
+    tasks = Task.objects.filter(created_by=request.user).order_by('due_date')
+    
+    # Handle task creation
+    if request.method == 'POST':
+        if 'create_task' in request.POST:
+            form = TaskForm(request.POST, user=request.user)
+            if form.is_valid():
+                task = form.save(commit=False)
+                task.created_by = request.user
+                task.save()
+                form.save_m2m()  # Save many-to-many relationships
+                messages.success(request, f"Task '{task.title}' created successfully.")
+                return redirect('manage_faculty_tasks')
+        elif 'update_task' in request.POST:
+            task_id = request.POST.get('task_id')
+            task = get_object_or_404(Task, id=task_id)
+            form = TaskForm(request.POST, instance=task, user=request.user)
+            if form.is_valid():
+                task = form.save(commit=False)
+                task.save()
+                form.save_m2m()  # Save many-to-many relationships
+                messages.success(request, f"Task '{task.title}' updated successfully.")
+                return redirect('manage_faculty_tasks')
+    else:
+        form = TaskForm(user=request.user)
+    
+    return render(request, 'users/faculty_managetasks.html', {
+        'faculty': faculty,
+        'courses': courses,
+        'tasks': tasks,
+        'form': form,
+    })
+
+@login_required
+@user_passes_test(is_faculty_or_admin)
+def delete_faculty_task(request, task_id):
+    if request.method == 'POST':
+        task = get_object_or_404(Task, id=task_id)
+        try:
+            task.delete()
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
