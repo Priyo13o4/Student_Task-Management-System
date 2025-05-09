@@ -427,7 +427,7 @@ body.dark-mode .btn-success {
     border: 1px solid #e74a3b !important;
     transform: translateY(-2px);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-}
+  }
 
 #profile_menu{
   background-color:  #7600bc;

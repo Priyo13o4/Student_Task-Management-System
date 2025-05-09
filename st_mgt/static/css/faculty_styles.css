@@ -493,8 +493,8 @@ input:focus, select:focus, textarea:focus {
 /* Toggle button styles */
 #darkModeToggle {
     position: fixed;
-    top: 1.5rem;
-    left: 1.5rem;
+    top: 20px;
+    left: 20px;
     z-index: 1000;
     background: var(--card-bg);
     color: var(--text-color);
@@ -594,4 +594,38 @@ body.dark-mode .btn-outline-success {
 .status-badge.completed {
     background-color: #32cd32;
     color: white;
+}
+
+/* Back Button Styles */
+.back-btn {
+    position: fixed;
+    top: 20px;
+    left: 180px;
+    background: rgba(78, 115, 223, 0.7) !important;
+    color: #fff !important;
+    border: 1px solid #4e73df !important;
+    border-radius: 12px !important;
+    padding: 8px 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: all 0.2s ease;
+    text-decoration: none;
+    font-weight: 600;
+    z-index: 1000;
+}
+
+.back-btn:hover {
+    background: rgba(255,255,255,0.7) !important;
+    color: #4e73df !important;
+    border: 1px solid #4e73df !important;
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.back-btn i {
+    font-size: 1.1rem;
 } 
