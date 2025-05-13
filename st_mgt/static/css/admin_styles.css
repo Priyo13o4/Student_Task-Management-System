@@ -7,7 +7,7 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  background: linear-gradient(135deg, #fcfcfc 0%, #2575fc 100%);
   /* background : url('/static/images/login_bg.png') no-repeat center center fixed; */
   color: #333;
   line-height: 1.6;
@@ -37,7 +37,7 @@ a {
 /* Welcome Section */
 #welcome {
   font-size: 20px;
-  color: #fff;
+  color: #000000;
   margin: 20px 0;
   font-weight: bold;
 }

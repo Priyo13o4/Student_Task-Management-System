@@ -26,6 +26,28 @@
         .export-button:hover {
             background-color: #45a049;
         }
+        /* Hide spinner for number input (Chrome, Safari, Edge) */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+          -webkit-appearance: none; 
+          margin: 0; 
+        }
+        /* Hide spinner for Firefox */
+        input[type=number] {
+          -moz-appearance: textfield;
+        }
+        /* Make select same size as input */
+        .student-info select {
+          width: 100%;
+          height: 38px;
+          box-sizing: border-box;
+        }
+        .student-info input[type="text"],
+        .student-info input[type="number"] {
+          width: 100%;
+          height: 38px;
+          box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
@@ -40,18 +62,36 @@
         <form method="POST" id="updateForm">
             {% csrf_token %}
         <h1>Manage {{ student.user.first_name }} {{ student.user.last_name }} ({{ student.user.username }})</h1>
-        <div class="student-info">
-            <p><strong>First Name:</strong> <input type="text" name="first_name" value="{{ student.user.first_name }}" onchange="enableUpdateButton()"></p>
-            <p><strong>Last Name:</strong> <input type="text" name="last_name" value="{{ student.user.last_name }}" onchange="enableUpdateButton()"></p>
-            <p><strong>Register No:</strong> <input type="text" name="register_no" value="{{ student.register_no }}" onchange="enableUpdateButton()"></p>
-            <p><strong>Department:</strong> <input type="text" name="department" value="{{ student.department }}" onchange="enableUpdateButton()"></p>
-            <p><strong>Level:</strong> 
-                <select name="level" onchange="enableUpdateButton()">
-                    <option value="UG" {% if student.level == 'UG' %}selected{% endif %}>Undergraduate</option>
-                    <option value="PG" {% if student.level == 'PG' %}selected{% endif %}>Graduate</option>
-                </select>
-            </p>
-            <p><strong>Current GPA:</strong> {{ gpa }}</p>
+        <div class="student-info" style="display: flex; flex-wrap: wrap; gap: 24px;">
+            <div style="flex: 1 1 200px; min-width: 200px;">
+                <p><strong>First Name:</strong> <input type="text" name="first_name" value="{{ student.user.first_name }}" onchange="enableUpdateButton()"></p>
+            </div>
+            <div style="flex: 1 1 200px; min-width: 200px;">
+                <p><strong>Last Name:</strong> <input type="text" name="last_name" value="{{ student.user.last_name }}" onchange="enableUpdateButton()"></p>
+            </div>
+            <div style="flex: 1 1 200px; min-width: 200px;">
+                <p><strong>Register No:</strong> <input type="text" name="register_no" value="{{ student.register_no }}" onchange="enableUpdateButton()"></p>
+            </div>
+            <div style="flex: 1 1 200px; min-width: 200px;">
+                <p><strong>Department:</strong> <input type="text" name="department" value="{{ student.department }}" onchange="enableUpdateButton()"></p>
+            </div>
+            <div style="flex: 1 1 200px; min-width: 200px;">
+                <p><strong>Level:</strong> 
+                    <select name="level" onchange="enableUpdateButton()">
+                        <option value="UG" {% if student.level == 'UG' %}selected{% endif %}>Undergraduate</option>
+                        <option value="PG" {% if student.level == 'PG' %}selected{% endif %}>Graduate</option>
+                    </select>
+                </p>
+            </div>
+            <div style="flex: 1 1 200px; min-width: 200px; display: flex; align-items: center; gap: 8px;">
+                <strong>Attendance:</strong>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                    <input type="number" name="attendance" value="{{ student.attendance }}" min="0" max="100" step="0.1" onchange="enableUpdateButton()" style="width: 70px; margin-bottom: 0;"> <span style="margin-left: 2px;">%</span>
+                </div>
+            </div>
+            <div style="flex: 1 1 200px; min-width: 200px; display: flex; align-items: center; justify-content: center;">
+                <span style="font-weight: bold;">Current GPA:</span>&nbsp;<span>{{ gpa }}</span>
+            </div>
         </div>
         <button type="submit" name="update_details" id="updateButton" disabled>Update Details</button>
         </form>
@@ -106,7 +146,7 @@
         </div>
 
         <div class="back-link-container">
-            <a href="{% url 'admin_dashboard' %}" class="back-link">← Back to admin_dashboard</a>
+            <a href="{% url 'admin_dashboard' %}" class="back-link">← Back to admin dashboard</a>
         </div>
     </div>
 

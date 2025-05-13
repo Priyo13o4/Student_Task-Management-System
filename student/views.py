@@ -88,6 +88,18 @@ def manage_student(request, student_id):
         student.register_no = request.POST.get('register_no', '')
         student.department = request.POST.get('department', '')
         
+        # Update attendance
+        try:
+            attendance = float(request.POST.get('attendance', 0))
+            if 0 <= attendance <= 100:
+                student.attendance = attendance
+            else:
+                messages.error(request, "Attendance must be between 0 and 100.")
+                return redirect('manage_student', student_id=student_id)
+        except ValueError:
+            messages.error(request, "Invalid attendance value.")
+            return redirect('manage_student', student_id=student_id)
+        
         # Validate and set level
         level = request.POST.get('level', '')
         if level in ['UG', 'PG']:
